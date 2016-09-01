@@ -1,8 +1,7 @@
 export interface IDocumentSampleSettings {
     Id?: string;
-    TagIds?: Array<string>;
-    IsStratified?: boolean;
+    TagIdList?: Array<string>;
     Percent?: number;
     Size?: number;
-    Fields?: Array<string>;
+    FieldList?: Array<string>;
 }

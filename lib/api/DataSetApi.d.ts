@@ -12,5 +12,5 @@ export declare class DataSetApi {
     deleteDataSet(name: string, extraHttpRequestParams?: any): Observable<{}>;
     getDataSet(name: string, extraHttpRequestParams?: any): Observable<models.IDataSet>;
     getDataSets(extraHttpRequestParams?: any): Observable<Array<models.IDataSet>>;
-    updateDataSet(name: string, dataSetUpdate?: models.IDataSetUpdate, extraHttpRequestParams?: any): Observable<{}>;
+    updateDataSet(existingName: string, dataSetUpdate?: models.IDataSetUpdate, extraHttpRequestParams?: any): Observable<{}>;
 }

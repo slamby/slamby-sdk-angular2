@@ -3,5 +3,5 @@ export interface IDocumentFilterSettings {
     Pagination?: models.IPagination;
     Order?: models.IOrder;
     Filter?: models.IFilter;
-    Fields?: Array<string>;
+    FieldList?: Array<string>;
 }

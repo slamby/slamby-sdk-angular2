@@ -2,6 +2,7 @@ import * as models from './models';
 export interface IPrcService {
     PrepareSettings?: models.IPrcPrepareSettings;
     ActivateSettings?: models.IPrcActivateSettings;
+    IndexSettings?: models.IPrcIndexSettings;
     Id?: string;
     Name?: string;
     Alias?: string;

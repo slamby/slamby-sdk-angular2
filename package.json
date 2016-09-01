@@ -1,13 +1,9 @@
 {
   "name": "slamby-sdk-angular2",
-  "version": "0.18.0",
-  "description": "Swagger Angular 2 SDK for Slamby API",
+  "version": "1.0.0-rc1",
+  "description": "swagger client for slamby-sdk-angular2",
   "author": "Swagger Codegen Contributors",
   "keywords": [
-    "slamby",
-    "sdk",
-    "api",
-    "angular",
     "swagger-client"
   ],
   "license": "Apache-2.0",

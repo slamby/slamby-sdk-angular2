@@ -1,4 +1,4 @@
 export interface IDocumentMoveSettings {
-    Ids?: Array<string>;
+    DocumentIdList?: Array<string>;
     TargetDataSetName?: string;
 }

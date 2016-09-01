@@ -17,6 +17,7 @@ export declare namespace IProcess {
         Error,
         Interrupted,
         Paused,
+        Cancelling,
     }
     enum ITypeEnum {
         ClassifierPrepare,
@@ -26,5 +27,7 @@ export declare namespace IProcess {
         TagsExportWords,
         ClassifierActivate,
         PrcActivate,
+        PrcIndex,
+        PrcIndexPartial,
     }
 }

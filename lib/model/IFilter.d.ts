@@ -1,4 +1,4 @@
 export interface IFilter {
-    TagIds?: Array<string>;
+    TagIdList?: Array<string>;
     Query?: string;
 }

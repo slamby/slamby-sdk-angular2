@@ -1,6 +1,7 @@
 export * from './ClassifierServiceApi';
 export * from './DataSetApi';
 export * from './DocumentApi';
+export * from './HelperApi';
 export * from './PrcServiceApi';
 export * from './ProcessApi';
 export * from './ServiceApi';

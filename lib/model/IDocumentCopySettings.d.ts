@@ -1,4 +1,4 @@
 export interface IDocumentCopySettings {
-    Ids?: Array<string>;
+    DocumentIdList?: Array<string>;
     TargetDataSetName?: string;
 }

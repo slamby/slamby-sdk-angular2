@@ -1,6 +1,6 @@
 import * as models from './models';
 export interface ITagProperties {
-    Path?: Array<models.IPathItem>;
+    Paths?: Array<models.IPathItem>;
     Level?: number;
     IsLeaf?: boolean;
     DocumentCount?: number;
