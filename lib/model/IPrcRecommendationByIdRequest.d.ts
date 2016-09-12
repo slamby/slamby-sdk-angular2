@@ -1,9 +1,9 @@
 import * as models from './models';
 export interface IPrcRecommendationByIdRequest {
     DocumentId?: string;
+    Query?: string;
     Count?: number;
     NeedDocumentInResult?: boolean;
     TagId?: string;
-    Filter?: models.IFilter;
     Weights?: Array<models.IWeight>;
 }

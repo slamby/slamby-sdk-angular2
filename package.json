@@ -1,6 +1,6 @@
 {
   "name": "slamby-sdk-angular2",
-  "version": "1.0.0-rc1",
+  "version": "1.0.0",
   "description": "swagger client for slamby-sdk-angular2",
   "author": "Swagger Codegen Contributors",
   "keywords": [
