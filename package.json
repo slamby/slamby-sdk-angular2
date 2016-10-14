@@ -1,17 +1,19 @@
 {
   "name": "slamby-sdk-angular2",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "swagger client for slamby-sdk-angular2",
   "author": "Swagger Codegen Contributors",
   "keywords": [
     "swagger-client"
   ],
   "license": "Apache-2.0",
+  "files": [
+    "dist"
+  ],
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "typings install && tsc --outDir dist/",
-    "postinstall": "npm run build"
+    "build": "typings install && tsc --outDir dist/"
   },
   "peerDependencies": {
     "@angular/core": "^2.0.0-rc.5",
