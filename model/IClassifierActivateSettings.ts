@@ -22,15 +22,12 @@
  * limitations under the License.
  */
 
-'use strict';
 import * as models from './models';
 
 /**
  * These settings are required for the recommendation (Recommend method)
  */
 export interface IClassifierActivateSettings {
-    
-
     /**
      * The list of the tag Ids which will emphasized during the recommendation
      */
@@ -45,5 +42,5 @@ export interface IClassifierActivateSettings {
      * The list of the NGrams will be activated (the recommendation algorithm will be use these only)
      */
     NGramList?: Array<number>;
-}
 
+}

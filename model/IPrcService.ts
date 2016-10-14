@@ -22,12 +22,9 @@
  * limitations under the License.
  */
 
-'use strict';
 import * as models from './models';
 
 export interface IPrcService {
-    
-
     PrepareSettings?: models.IPrcPrepareSettings;
 
     ActivateSettings?: models.IPrcActivateSettings;
@@ -42,7 +39,7 @@ export interface IPrcService {
     /**
      * User-defined name for the service
      */
-    Name?: string;
+    Name: string;
 
     /**
      * Alias name of the service. Services can be accessed via this name.              Alias can be modified. It is unique amongst the services.
@@ -62,7 +59,7 @@ export interface IPrcService {
     /**
      * Type of the service.              Currently supported types:              - Classifier              - Prc
      */
-    Type?: IPrcService.ITypeEnum;
+    Type: IPrcService.ITypeEnum;
 
     /**
      * Contains all the process ids which belong to this service
@@ -70,19 +67,17 @@ export interface IPrcService {
     ProcessIdList?: Array<string>;
 
     ActualProcessId?: string;
+
 }
-
 export namespace IPrcService {
-
-    export enum IStatusEnum { 
+    export enum IStatusEnum {
         New = <any> 'New',
         Busy = <any> 'Busy',
         Prepared = <any> 'Prepared',
-        Active = <any> 'Active',
+        Active = <any> 'Active'
     }
-
-    export enum ITypeEnum { 
+    export enum ITypeEnum {
         Classifier = <any> 'Classifier',
-        Prc = <any> 'Prc',
+        Prc = <any> 'Prc'
     }
 }

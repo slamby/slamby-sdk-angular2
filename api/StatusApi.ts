@@ -22,24 +22,33 @@
  * limitations under the License.
  */
 
-import {Http, Headers, RequestOptionsArgs, Response, URLSearchParams} from '@angular/http';
-import {Injectable, Optional} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import * as models from '../model/models';
-import 'rxjs/Rx';
+import { Inject, Injectable, Optional }                      from '@angular/core';
+import { Http, Headers, URLSearchParams }                    from '@angular/http';
+import { RequestMethod, RequestOptions, RequestOptionsArgs } from '@angular/http';
+import { Response, ResponseContentType }                     from '@angular/http';
+
+import { Observable }                                        from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+
+import * as models                                           from '../model/models';
+import { BASE_PATH }                                         from '../variables';
+import { Configuration }                                     from '../configuration';
 
 /* tslint:disable:no-unused-variable member-ordering */
 
-'use strict';
 
 @Injectable()
 export class StatusApi {
     protected basePath = 'https://localhost/';
-    public defaultHeaders : Headers = new Headers();
+    public defaultHeaders: Headers = new Headers();
+    public configuration: Configuration = new Configuration();
 
-    constructor(protected http: Http, @Optional() basePath: string) {
+    constructor(protected http: Http, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
+        }
+        if (configuration) {
+            this.configuration = configuration;
         }
     }
 
@@ -47,18 +56,8 @@ export class StatusApi {
      * 
      * 
      */
-    public getStatus (extraHttpRequestParams?: any ) : Observable<models.IStatus> {
-        const path = this.basePath + '/api/Status';
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        let requestOptions: RequestOptionsArgs = {
-            method: 'GET',
-            headers: headerParams,
-            search: queryParameters
-        };
-
-        return this.http.request(path, requestOptions)
+    public getStatus(extraHttpRequestParams?: any): Observable<models.IStatus> {
+        return this.getStatusWithHttpInfo(extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -66,6 +65,40 @@ export class StatusApi {
                     return response.json();
                 }
             });
+    }
+
+
+    /**
+     * 
+     * 
+     */
+    public getStatusWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Status`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'GET',
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
     }
 
 }

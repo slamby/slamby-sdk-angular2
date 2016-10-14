@@ -22,24 +22,33 @@
  * limitations under the License.
  */
 
-import {Http, Headers, RequestOptionsArgs, Response, URLSearchParams} from '@angular/http';
-import {Injectable, Optional} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import * as models from '../model/models';
-import 'rxjs/Rx';
+import { Inject, Injectable, Optional }                      from '@angular/core';
+import { Http, Headers, URLSearchParams }                    from '@angular/http';
+import { RequestMethod, RequestOptions, RequestOptionsArgs } from '@angular/http';
+import { Response, ResponseContentType }                     from '@angular/http';
+
+import { Observable }                                        from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+
+import * as models                                           from '../model/models';
+import { BASE_PATH }                                         from '../variables';
+import { Configuration }                                     from '../configuration';
 
 /* tslint:disable:no-unused-variable member-ordering */
 
-'use strict';
 
 @Injectable()
 export class PrcServiceApi {
     protected basePath = 'https://localhost/';
-    public defaultHeaders : Headers = new Headers();
+    public defaultHeaders: Headers = new Headers();
+    public configuration: Configuration = new Configuration();
 
-    constructor(protected http: Http, @Optional() basePath: string) {
+    constructor(protected http: Http, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
+        }
+        if (configuration) {
+            this.configuration = configuration;
         }
     }
 
@@ -49,24 +58,8 @@ export class PrcServiceApi {
      * @param id 
      * @param prcActivateSettings 
      */
-    public prcActivateService (id: string, prcActivateSettings?: models.IPrcActivateSettings, extraHttpRequestParams?: any ) : Observable<models.IProcess> {
-        const path = this.basePath + '/api/Services/Prc/{id}/Activate'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling prcActivateService.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(prcActivateSettings);
-
-        return this.http.request(path, requestOptions)
+    public prcActivateService(id: string, prcActivateSettings?: models.IPrcActivateSettings, extraHttpRequestParams?: any): Observable<models.IProcess> {
+        return this.prcActivateServiceWithHttpInfo(id, prcActivateSettings, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -81,23 +74,8 @@ export class PrcServiceApi {
      * 
      * @param id 
      */
-    public prcDeactivateService (id: string, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/Services/Prc/{id}/Deactivate'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling prcDeactivateService.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-
-        return this.http.request(path, requestOptions)
+    public prcDeactivateService(id: string, extraHttpRequestParams?: any): Observable<{}> {
+        return this.prcDeactivateServiceWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -113,24 +91,8 @@ export class PrcServiceApi {
      * @param id 
      * @param settings 
      */
-    public prcExportDictionaries (id: string, settings?: models.IExportDictionariesSettings, extraHttpRequestParams?: any ) : Observable<models.IProcess> {
-        const path = this.basePath + '/api/Services/Prc/{id}/ExportDictionaries'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling prcExportDictionaries.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(settings);
-
-        return this.http.request(path, requestOptions)
+    public prcExportDictionaries(id: string, settings?: models.IExportDictionariesSettings, extraHttpRequestParams?: any): Observable<models.IProcess> {
+        return this.prcExportDictionariesWithHttpInfo(id, settings, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -145,23 +107,8 @@ export class PrcServiceApi {
      * 
      * @param id 
      */
-    public prcGetService (id: string, extraHttpRequestParams?: any ) : Observable<models.IPrcService> {
-        const path = this.basePath + '/api/Services/Prc/{id}'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling prcGetService.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'GET',
-            headers: headerParams,
-            search: queryParameters
-        };
-
-        return this.http.request(path, requestOptions)
+    public prcGetService(id: string, extraHttpRequestParams?: any): Observable<models.IPrcService> {
+        return this.prcGetServiceWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -176,23 +123,8 @@ export class PrcServiceApi {
      * 
      * @param id 
      */
-    public prcIndexPartialService (id: string, extraHttpRequestParams?: any ) : Observable<models.IProcess> {
-        const path = this.basePath + '/api/Services/Prc/{id}/IndexPartial'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling prcIndexPartialService.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-
-        return this.http.request(path, requestOptions)
+    public prcIndexPartialService(id: string, extraHttpRequestParams?: any): Observable<models.IProcess> {
+        return this.prcIndexPartialServiceWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -208,24 +140,8 @@ export class PrcServiceApi {
      * @param id 
      * @param prcIndexSettings 
      */
-    public prcIndexService (id: string, prcIndexSettings?: models.IPrcIndexSettings, extraHttpRequestParams?: any ) : Observable<models.IProcess> {
-        const path = this.basePath + '/api/Services/Prc/{id}/Index'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling prcIndexService.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(prcIndexSettings);
-
-        return this.http.request(path, requestOptions)
+    public prcIndexService(id: string, prcIndexSettings?: models.IPrcIndexSettings, extraHttpRequestParams?: any): Observable<models.IProcess> {
+        return this.prcIndexServiceWithHttpInfo(id, prcIndexSettings, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -242,28 +158,8 @@ export class PrcServiceApi {
      * @param request 
      * @param isStrict 
      */
-    public prcKeywordsService (id: string, request?: models.IPrcKeywordsRequest, isStrict?: boolean, extraHttpRequestParams?: any ) : Observable<Array<models.IPrcKeywordsResult>> {
-        const path = this.basePath + '/api/Services/Prc/{id}/Keywords'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling prcKeywordsService.');
-        }
-        if (isStrict !== undefined) {
-            queryParameters.set('isStrict', String(isStrict));
-        }
-
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(request);
-
-        return this.http.request(path, requestOptions)
+    public prcKeywordsService(id: string, request?: models.IPrcKeywordsRequest, isStrict?: boolean, extraHttpRequestParams?: any): Observable<Array<models.IPrcKeywordsResult>> {
+        return this.prcKeywordsServiceWithHttpInfo(id, request, isStrict, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -279,31 +175,373 @@ export class PrcServiceApi {
      * @param id 
      * @param prcPrepareSettings 
      */
-    public prcPrepareService (id: string, prcPrepareSettings?: models.IPrcPrepareSettings, extraHttpRequestParams?: any ) : Observable<models.IProcess> {
-        const path = this.basePath + '/api/Services/Prc/{id}/Prepare'
-            .replace('{' + 'id' + '}', String(id));
+    public prcPrepareService(id: string, prcPrepareSettings?: models.IPrcPrepareSettings, extraHttpRequestParams?: any): Observable<models.IProcess> {
+        return this.prcPrepareServiceWithHttpInfo(id, prcPrepareSettings, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param request 
+     */
+    public prcRecommendByIdService(id: string, request?: models.IPrcRecommendationByIdRequest, extraHttpRequestParams?: any): Observable<Array<models.IPrcRecommendationResult>> {
+        return this.prcRecommendByIdServiceWithHttpInfo(id, request, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param request 
+     */
+    public prcRecommendService(id: string, request?: models.IPrcRecommendationRequest, extraHttpRequestParams?: any): Observable<Array<models.IPrcRecommendationResult>> {
+        return this.prcRecommendServiceWithHttpInfo(id, request, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param prcActivateSettings 
+     */
+    public prcActivateServiceWithHttpInfo(id: string, prcActivateSettings?: models.IPrcActivateSettings, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Prc/{id}/Activate`;
 
         let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling prcActivateService.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: prcActivateSettings == null ? '' : JSON.stringify(prcActivateSettings), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     */
+    public prcDeactivateServiceWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Prc/{id}/Deactivate`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling prcDeactivateService.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param settings 
+     */
+    public prcExportDictionariesWithHttpInfo(id: string, settings?: models.IExportDictionariesSettings, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Prc/{id}/ExportDictionaries`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling prcExportDictionaries.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: settings == null ? '' : JSON.stringify(settings), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     */
+    public prcGetServiceWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Prc/{id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling prcGetService.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'GET',
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     */
+    public prcIndexPartialServiceWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Prc/{id}/IndexPartial`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling prcIndexPartialService.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param prcIndexSettings 
+     */
+    public prcIndexServiceWithHttpInfo(id: string, prcIndexSettings?: models.IPrcIndexSettings, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Prc/{id}/Index`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling prcIndexService.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: prcIndexSettings == null ? '' : JSON.stringify(prcIndexSettings), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param request 
+     * @param isStrict 
+     */
+    public prcKeywordsServiceWithHttpInfo(id: string, request?: models.IPrcKeywordsRequest, isStrict?: boolean, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Prc/{id}/Keywords`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling prcKeywordsService.');
+        }
+        if (isStrict !== undefined) {
+            queryParameters.set('isStrict', <any>isStrict);
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: request == null ? '' : JSON.stringify(request), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param prcPrepareSettings 
+     */
+    public prcPrepareServiceWithHttpInfo(id: string, prcPrepareSettings?: models.IPrcPrepareSettings, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Prc/{id}/Prepare`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling prcPrepareService.');
         }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(prcPrepareSettings);
 
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: prcPrepareSettings == null ? '' : JSON.stringify(prcPrepareSettings), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
     }
 
     /**
@@ -312,31 +550,39 @@ export class PrcServiceApi {
      * @param id 
      * @param request 
      */
-    public prcRecommendByIdService (id: string, request?: models.IPrcRecommendationByIdRequest, extraHttpRequestParams?: any ) : Observable<Array<models.IPrcRecommendationResult>> {
-        const path = this.basePath + '/api/Services/Prc/{id}/RecommendById'
-            .replace('{' + 'id' + '}', String(id));
+    public prcRecommendByIdServiceWithHttpInfo(id: string, request?: models.IPrcRecommendationByIdRequest, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Prc/{id}/RecommendById`;
 
         let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling prcRecommendByIdService.');
         }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(request);
 
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: request == null ? '' : JSON.stringify(request), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
     }
 
     /**
@@ -345,31 +591,39 @@ export class PrcServiceApi {
      * @param id 
      * @param request 
      */
-    public prcRecommendService (id: string, request?: models.IPrcRecommendationRequest, extraHttpRequestParams?: any ) : Observable<Array<models.IPrcRecommendationResult>> {
-        const path = this.basePath + '/api/Services/Prc/{id}/Recommend'
-            .replace('{' + 'id' + '}', String(id));
+    public prcRecommendServiceWithHttpInfo(id: string, request?: models.IPrcRecommendationRequest, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Prc/{id}/Recommend`;
 
         let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling prcRecommendService.');
         }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(request);
 
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: request == null ? '' : JSON.stringify(request), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
     }
 
 }

@@ -22,24 +22,33 @@
  * limitations under the License.
  */
 
-import {Http, Headers, RequestOptionsArgs, Response, URLSearchParams} from '@angular/http';
-import {Injectable, Optional} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import * as models from '../model/models';
-import 'rxjs/Rx';
+import { Inject, Injectable, Optional }                      from '@angular/core';
+import { Http, Headers, URLSearchParams }                    from '@angular/http';
+import { RequestMethod, RequestOptions, RequestOptionsArgs } from '@angular/http';
+import { Response, ResponseContentType }                     from '@angular/http';
+
+import { Observable }                                        from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+
+import * as models                                           from '../model/models';
+import { BASE_PATH }                                         from '../variables';
+import { Configuration }                                     from '../configuration';
 
 /* tslint:disable:no-unused-variable member-ordering */
 
-'use strict';
 
 @Injectable()
 export class DocumentApi {
     protected basePath = 'https://localhost/';
-    public defaultHeaders : Headers = new Headers();
+    public defaultHeaders: Headers = new Headers();
+    public configuration: Configuration = new Configuration();
 
-    constructor(protected http: Http, @Optional() basePath: string) {
+    constructor(protected http: Http, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
+        }
+        if (configuration) {
+            this.configuration = configuration;
         }
     }
 
@@ -48,19 +57,8 @@ export class DocumentApi {
      * 
      * @param settings 
      */
-    public bulkDocuments (settings?: models.IDocumentBulkSettings, extraHttpRequestParams?: any ) : Observable<models.IBulkResults> {
-        const path = this.basePath + '/api/Documents/Bulk';
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(settings);
-
-        return this.http.request(path, requestOptions)
+    public bulkDocuments(settings?: models.IDocumentBulkSettings, extraHttpRequestParams?: any): Observable<models.IBulkResults> {
+        return this.bulkDocumentsWithHttpInfo(settings, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -75,19 +73,8 @@ export class DocumentApi {
      * 
      * @param copySettings 
      */
-    public copyDocuments (copySettings?: models.IDocumentCopySettings, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/Documents/Copy';
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(copySettings);
-
-        return this.http.request(path, requestOptions)
+    public copyDocuments(copySettings?: models.IDocumentCopySettings, extraHttpRequestParams?: any): Observable<{}> {
+        return this.copyDocumentsWithHttpInfo(copySettings, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -102,19 +89,8 @@ export class DocumentApi {
      * 
      * @param document 
      */
-    public createDocument (document?: any, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/Documents';
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(document);
-
-        return this.http.request(path, requestOptions)
+    public createDocument(document?: any, extraHttpRequestParams?: any): Observable<{}> {
+        return this.createDocumentWithHttpInfo(document, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -129,23 +105,8 @@ export class DocumentApi {
      * 
      * @param id 
      */
-    public deleteDocument (id: string, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/Documents/{id}'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling deleteDocument.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'DELETE',
-            headers: headerParams,
-            search: queryParameters
-        };
-
-        return this.http.request(path, requestOptions)
+    public deleteDocument(id: string, extraHttpRequestParams?: any): Observable<{}> {
+        return this.deleteDocumentWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -160,23 +121,8 @@ export class DocumentApi {
      * 
      * @param id 
      */
-    public getDocument (id: string, extraHttpRequestParams?: any ) : Observable<any> {
-        const path = this.basePath + '/api/Documents/{id}'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getDocument.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'GET',
-            headers: headerParams,
-            search: queryParameters
-        };
-
-        return this.http.request(path, requestOptions)
+    public getDocument(id: string, extraHttpRequestParams?: any): Observable<any> {
+        return this.getDocumentWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -192,24 +138,8 @@ export class DocumentApi {
      * @param scrollId 
      * @param filterSettings 
      */
-    public getFilteredDocuments (scrollId: string, filterSettings?: models.IDocumentFilterSettings, extraHttpRequestParams?: any ) : Observable<models.IPaginatedListObject> {
-        const path = this.basePath + '/api/Documents/Filter/{scrollId}'
-            .replace('{' + 'scrollId' + '}', String(scrollId));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'scrollId' is not null or undefined
-        if (scrollId === null || scrollId === undefined) {
-            throw new Error('Required parameter scrollId was null or undefined when calling getFilteredDocuments.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(filterSettings);
-
-        return this.http.request(path, requestOptions)
+    public getFilteredDocuments(scrollId: string, filterSettings?: models.IDocumentFilterSettings, extraHttpRequestParams?: any): Observable<models.IPaginatedListObject> {
+        return this.getFilteredDocumentsWithHttpInfo(scrollId, filterSettings, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -224,19 +154,8 @@ export class DocumentApi {
      * 
      * @param sampleSettings 
      */
-    public getSampleDocuments (sampleSettings?: models.IDocumentSampleSettings, extraHttpRequestParams?: any ) : Observable<models.IPaginatedListObject> {
-        const path = this.basePath + '/api/Documents/Sample';
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(sampleSettings);
-
-        return this.http.request(path, requestOptions)
+    public getSampleDocuments(sampleSettings?: models.IDocumentSampleSettings, extraHttpRequestParams?: any): Observable<models.IPaginatedListObject> {
+        return this.getSampleDocumentsWithHttpInfo(sampleSettings, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -251,19 +170,8 @@ export class DocumentApi {
      * 
      * @param moveSettings 
      */
-    public moveDocuments (moveSettings?: models.IDocumentMoveSettings, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/Documents/Move';
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(moveSettings);
-
-        return this.http.request(path, requestOptions)
+    public moveDocuments(moveSettings?: models.IDocumentMoveSettings, extraHttpRequestParams?: any): Observable<{}> {
+        return this.moveDocumentsWithHttpInfo(moveSettings, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -279,24 +187,8 @@ export class DocumentApi {
      * @param id 
      * @param document 
      */
-    public updateDocument (id: string, document?: any, extraHttpRequestParams?: any ) : Observable<any> {
-        const path = this.basePath + '/api/Documents/{id}'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling updateDocument.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'PUT',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(document);
-
-        return this.http.request(path, requestOptions)
+    public updateDocument(id: string, document?: any, extraHttpRequestParams?: any): Observable<any> {
+        return this.updateDocumentWithHttpInfo(id, document, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -304,6 +196,345 @@ export class DocumentApi {
                     return response.json();
                 }
             });
+    }
+
+
+    /**
+     * 
+     * 
+     * @param settings 
+     */
+    public bulkDocumentsWithHttpInfo(settings?: models.IDocumentBulkSettings, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Documents/Bulk`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: settings == null ? '' : JSON.stringify(settings), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param copySettings 
+     */
+    public copyDocumentsWithHttpInfo(copySettings?: models.IDocumentCopySettings, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Documents/Copy`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: copySettings == null ? '' : JSON.stringify(copySettings), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param document 
+     */
+    public createDocumentWithHttpInfo(document?: any, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Documents`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: document == null ? '' : JSON.stringify(document), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     */
+    public deleteDocumentWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Documents/{id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling deleteDocument.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'DELETE',
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     */
+    public getDocumentWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Documents/{id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getDocument.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'GET',
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param scrollId 
+     * @param filterSettings 
+     */
+    public getFilteredDocumentsWithHttpInfo(scrollId: string, filterSettings?: models.IDocumentFilterSettings, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Documents/Filter/{scrollId}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'scrollId' is not null or undefined
+        if (scrollId === null || scrollId === undefined) {
+            throw new Error('Required parameter scrollId was null or undefined when calling getFilteredDocuments.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: filterSettings == null ? '' : JSON.stringify(filterSettings), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param sampleSettings 
+     */
+    public getSampleDocumentsWithHttpInfo(sampleSettings?: models.IDocumentSampleSettings, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Documents/Sample`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: sampleSettings == null ? '' : JSON.stringify(sampleSettings), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param moveSettings 
+     */
+    public moveDocumentsWithHttpInfo(moveSettings?: models.IDocumentMoveSettings, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Documents/Move`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: moveSettings == null ? '' : JSON.stringify(moveSettings), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param document 
+     */
+    public updateDocumentWithHttpInfo(id: string, document?: any, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Documents/{id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling updateDocument.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'PUT',
+            headers: headers,
+            body: document == null ? '' : JSON.stringify(document), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
     }
 
 }

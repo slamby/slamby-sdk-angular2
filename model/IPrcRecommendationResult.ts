@@ -22,16 +22,13 @@
  * limitations under the License.
  */
 
-'use strict';
 import * as models from './models';
 
 export interface IPrcRecommendationResult {
-    
-
     DocumentId?: string;
 
     Score?: number;
 
     Document?: any;
-}
 
+}

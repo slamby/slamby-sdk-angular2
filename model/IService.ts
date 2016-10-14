@@ -22,12 +22,9 @@
  * limitations under the License.
  */
 
-'use strict';
 import * as models from './models';
 
 export interface IService {
-    
-
     /**
      * Service unique identifier. It cannot be modified.
      */
@@ -36,7 +33,7 @@ export interface IService {
     /**
      * User-defined name for the service
      */
-    Name?: string;
+    Name: string;
 
     /**
      * Alias name of the service. Services can be accessed via this name.              Alias can be modified. It is unique amongst the services.
@@ -56,7 +53,7 @@ export interface IService {
     /**
      * Type of the service.              Currently supported types:              - Classifier              - Prc
      */
-    Type?: IService.ITypeEnum;
+    Type: IService.ITypeEnum;
 
     /**
      * Contains all the process ids which belong to this service
@@ -64,19 +61,17 @@ export interface IService {
     ProcessIdList?: Array<string>;
 
     ActualProcessId?: string;
+
 }
-
 export namespace IService {
-
-    export enum IStatusEnum { 
+    export enum IStatusEnum {
         New = <any> 'New',
         Busy = <any> 'Busy',
         Prepared = <any> 'Prepared',
-        Active = <any> 'Active',
+        Active = <any> 'Active'
     }
-
-    export enum ITypeEnum { 
+    export enum ITypeEnum {
         Classifier = <any> 'Classifier',
-        Prc = <any> 'Prc',
+        Prc = <any> 'Prc'
     }
 }

@@ -22,15 +22,12 @@
  * limitations under the License.
  */
 
-'use strict';
 import * as models from './models';
 
 /**
  * 
  */
 export interface IProcess {
-    
-
     /**
      * The process GUID identifier
      */
@@ -69,21 +66,19 @@ export interface IProcess {
     ErrorMessages?: Array<string>;
 
     ResultMessage?: string;
+
 }
-
 export namespace IProcess {
-
-    export enum IStatusEnum { 
+    export enum IStatusEnum {
         InProgress = <any> 'InProgress',
         Cancelled = <any> 'Cancelled',
         Finished = <any> 'Finished',
         Error = <any> 'Error',
         Interrupted = <any> 'Interrupted',
         Paused = <any> 'Paused',
-        Cancelling = <any> 'Cancelling',
+        Cancelling = <any> 'Cancelling'
     }
-
-    export enum ITypeEnum { 
+    export enum ITypeEnum {
         ClassifierPrepare = <any> 'ClassifierPrepare',
         PrcPrepare = <any> 'PrcPrepare',
         ClassifierExportDictionaries = <any> 'ClassifierExportDictionaries',
@@ -92,6 +87,6 @@ export namespace IProcess {
         ClassifierActivate = <any> 'ClassifierActivate',
         PrcActivate = <any> 'PrcActivate',
         PrcIndex = <any> 'PrcIndex',
-        PrcIndexPartial = <any> 'PrcIndexPartial',
+        PrcIndexPartial = <any> 'PrcIndexPartial'
     }
 }

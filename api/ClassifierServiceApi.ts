@@ -22,24 +22,33 @@
  * limitations under the License.
  */
 
-import {Http, Headers, RequestOptionsArgs, Response, URLSearchParams} from '@angular/http';
-import {Injectable, Optional} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import * as models from '../model/models';
-import 'rxjs/Rx';
+import { Inject, Injectable, Optional }                      from '@angular/core';
+import { Http, Headers, URLSearchParams }                    from '@angular/http';
+import { RequestMethod, RequestOptions, RequestOptionsArgs } from '@angular/http';
+import { Response, ResponseContentType }                     from '@angular/http';
+
+import { Observable }                                        from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+
+import * as models                                           from '../model/models';
+import { BASE_PATH }                                         from '../variables';
+import { Configuration }                                     from '../configuration';
 
 /* tslint:disable:no-unused-variable member-ordering */
 
-'use strict';
 
 @Injectable()
 export class ClassifierServiceApi {
     protected basePath = 'https://localhost/';
-    public defaultHeaders : Headers = new Headers();
+    public defaultHeaders: Headers = new Headers();
+    public configuration: Configuration = new Configuration();
 
-    constructor(protected http: Http, @Optional() basePath: string) {
+    constructor(protected http: Http, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
+        }
+        if (configuration) {
+            this.configuration = configuration;
         }
     }
 
@@ -49,24 +58,8 @@ export class ClassifierServiceApi {
      * @param id 
      * @param classifierActivateSettings 
      */
-    public classifierActivateService (id: string, classifierActivateSettings?: models.IClassifierActivateSettings, extraHttpRequestParams?: any ) : Observable<models.IProcess> {
-        const path = this.basePath + '/api/Services/Classifier/{id}/Activate'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling classifierActivateService.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(classifierActivateSettings);
-
-        return this.http.request(path, requestOptions)
+    public classifierActivateService(id: string, classifierActivateSettings?: models.IClassifierActivateSettings, extraHttpRequestParams?: any): Observable<models.IProcess> {
+        return this.classifierActivateServiceWithHttpInfo(id, classifierActivateSettings, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -81,23 +74,8 @@ export class ClassifierServiceApi {
      * 
      * @param id 
      */
-    public classifierDeactivateService (id: string, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/Services/Classifier/{id}/Deactivate'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling classifierDeactivateService.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-
-        return this.http.request(path, requestOptions)
+    public classifierDeactivateService(id: string, extraHttpRequestParams?: any): Observable<{}> {
+        return this.classifierDeactivateServiceWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -113,24 +91,8 @@ export class ClassifierServiceApi {
      * @param id 
      * @param settings 
      */
-    public classifierExportDictionaries (id: string, settings?: models.IExportDictionariesSettings, extraHttpRequestParams?: any ) : Observable<models.IProcess> {
-        const path = this.basePath + '/api/Services/Classifier/{id}/ExportDictionaries'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling classifierExportDictionaries.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(settings);
-
-        return this.http.request(path, requestOptions)
+    public classifierExportDictionaries(id: string, settings?: models.IExportDictionariesSettings, extraHttpRequestParams?: any): Observable<models.IProcess> {
+        return this.classifierExportDictionariesWithHttpInfo(id, settings, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -145,23 +107,8 @@ export class ClassifierServiceApi {
      * 
      * @param id 
      */
-    public classifierGetService (id: string, extraHttpRequestParams?: any ) : Observable<models.IClassifierService> {
-        const path = this.basePath + '/api/Services/Classifier/{id}'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling classifierGetService.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'GET',
-            headers: headerParams,
-            search: queryParameters
-        };
-
-        return this.http.request(path, requestOptions)
+    public classifierGetService(id: string, extraHttpRequestParams?: any): Observable<models.IClassifierService> {
+        return this.classifierGetServiceWithHttpInfo(id, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -177,24 +124,8 @@ export class ClassifierServiceApi {
      * @param id 
      * @param classifierPrepareSettings 
      */
-    public classifierPrepareService (id: string, classifierPrepareSettings?: models.IClassifierPrepareSettings, extraHttpRequestParams?: any ) : Observable<models.IProcess> {
-        const path = this.basePath + '/api/Services/Classifier/{id}/Prepare'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling classifierPrepareService.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(classifierPrepareSettings);
-
-        return this.http.request(path, requestOptions)
+    public classifierPrepareService(id: string, classifierPrepareSettings?: models.IClassifierPrepareSettings, extraHttpRequestParams?: any): Observable<models.IProcess> {
+        return this.classifierPrepareServiceWithHttpInfo(id, classifierPrepareSettings, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -210,24 +141,8 @@ export class ClassifierServiceApi {
      * @param id 
      * @param request 
      */
-    public classifierRecommendService (id: string, request?: models.IClassifierRecommendationRequest, extraHttpRequestParams?: any ) : Observable<Array<models.IClassifierRecommendationResult>> {
-        const path = this.basePath + '/api/Services/Classifier/{id}/Recommend'
-            .replace('{' + 'id' + '}', String(id));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling classifierRecommendService.');
-        }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(request);
-
-        return this.http.request(path, requestOptions)
+    public classifierRecommendService(id: string, request?: models.IClassifierRecommendationRequest, extraHttpRequestParams?: any): Observable<Array<models.IClassifierRecommendationResult>> {
+        return this.classifierRecommendServiceWithHttpInfo(id, request, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -235,6 +150,247 @@ export class ClassifierServiceApi {
                     return response.json();
                 }
             });
+    }
+
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param classifierActivateSettings 
+     */
+    public classifierActivateServiceWithHttpInfo(id: string, classifierActivateSettings?: models.IClassifierActivateSettings, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Classifier/{id}/Activate`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling classifierActivateService.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: classifierActivateSettings == null ? '' : JSON.stringify(classifierActivateSettings), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     */
+    public classifierDeactivateServiceWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Classifier/{id}/Deactivate`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling classifierDeactivateService.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param settings 
+     */
+    public classifierExportDictionariesWithHttpInfo(id: string, settings?: models.IExportDictionariesSettings, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Classifier/{id}/ExportDictionaries`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling classifierExportDictionaries.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: settings == null ? '' : JSON.stringify(settings), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     */
+    public classifierGetServiceWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Classifier/{id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling classifierGetService.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'GET',
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param classifierPrepareSettings 
+     */
+    public classifierPrepareServiceWithHttpInfo(id: string, classifierPrepareSettings?: models.IClassifierPrepareSettings, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Classifier/{id}/Prepare`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling classifierPrepareService.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: classifierPrepareSettings == null ? '' : JSON.stringify(classifierPrepareSettings), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param request 
+     */
+    public classifierRecommendServiceWithHttpInfo(id: string, request?: models.IClassifierRecommendationRequest, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/Classifier/{id}/Recommend`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling classifierRecommendService.');
+        }
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: request == null ? '' : JSON.stringify(request), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
     }
 
 }

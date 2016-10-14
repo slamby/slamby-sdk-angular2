@@ -22,16 +22,13 @@
  * limitations under the License.
  */
 
-'use strict';
 import * as models from './models';
 
 export interface IClassifierRecommendationRequest {
-    
-
     /**
      * The text the you want to classify
      */
-    Text?: string;
+    Text: string;
 
     /**
      * How many results you want to see in the response (default value is 3)
@@ -47,5 +44,5 @@ export interface IClassifierRecommendationRequest {
      * If you want to see all the tag object in the response
      */
     NeedTagInResult?: boolean;
-}
 
+}

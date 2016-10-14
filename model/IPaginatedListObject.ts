@@ -22,12 +22,9 @@
  * limitations under the License.
  */
 
-'use strict';
 import * as models from './models';
 
 export interface IPaginatedListObject {
-    
-
     /**
      * Containing the actual displayed items. The type of the elements depend on the method
      */
@@ -47,5 +44,5 @@ export interface IPaginatedListObject {
      * Identifier for the next series of items where it is applicable
      */
     ScrollId?: string;
-}
 
+}

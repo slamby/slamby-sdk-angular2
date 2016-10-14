@@ -22,15 +22,12 @@
  * limitations under the License.
  */
 
-'use strict';
 import * as models from './models';
 
 /**
  * Stores error messages
  */
 export interface IErrorsModel {
-    
-
     Errors?: Array<string>;
-}
 
+}

@@ -22,24 +22,33 @@
  * limitations under the License.
  */
 
-import {Http, Headers, RequestOptionsArgs, Response, URLSearchParams} from '@angular/http';
-import {Injectable, Optional} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import * as models from '../model/models';
-import 'rxjs/Rx';
+import { Inject, Injectable, Optional }                      from '@angular/core';
+import { Http, Headers, URLSearchParams }                    from '@angular/http';
+import { RequestMethod, RequestOptions, RequestOptionsArgs } from '@angular/http';
+import { Response, ResponseContentType }                     from '@angular/http';
+
+import { Observable }                                        from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+
+import * as models                                           from '../model/models';
+import { BASE_PATH }                                         from '../variables';
+import { Configuration }                                     from '../configuration';
 
 /* tslint:disable:no-unused-variable member-ordering */
 
-'use strict';
 
 @Injectable()
 export class ServiceApi {
     protected basePath = 'https://localhost/';
-    public defaultHeaders : Headers = new Headers();
+    public defaultHeaders: Headers = new Headers();
+    public configuration: Configuration = new Configuration();
 
-    constructor(protected http: Http, @Optional() basePath: string) {
+    constructor(protected http: Http, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
+        }
+        if (configuration) {
+            this.configuration = configuration;
         }
     }
 
@@ -48,19 +57,8 @@ export class ServiceApi {
      * 
      * @param service 
      */
-    public createService (service?: models.IService, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/Services';
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(service);
-
-        return this.http.request(path, requestOptions)
+    public createService(service?: models.IService, extraHttpRequestParams?: any): Observable<{}> {
+        return this.createServiceWithHttpInfo(service, extraHttpRequestParams)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
@@ -75,30 +73,138 @@ export class ServiceApi {
      * 
      * @param id 
      */
-    public deleteService (id: string, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/Services/{id}'
-            .replace('{' + 'id' + '}', String(id));
+    public deleteService(id: string, extraHttpRequestParams?: any): Observable<{}> {
+        return this.deleteServiceWithHttpInfo(id, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     */
+    public getService(id: string, extraHttpRequestParams?: any): Observable<models.IService> {
+        return this.getServiceWithHttpInfo(id, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     * 
+     * 
+     */
+    public getServices(extraHttpRequestParams?: any): Observable<Array<models.IService>> {
+        return this.getServicesWithHttpInfo(extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param service 
+     */
+    public updateService(id: string, service?: models.IService, extraHttpRequestParams?: any): Observable<models.IService> {
+        return this.updateServiceWithHttpInfo(id, service, extraHttpRequestParams)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.json();
+                }
+            });
+    }
+
+
+    /**
+     * 
+     * 
+     * @param service 
+     */
+    public createServiceWithHttpInfo(service?: models.IService, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services`;
 
         let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'POST',
+            headers: headers,
+            body: service == null ? '' : JSON.stringify(service), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     */
+    public deleteServiceWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/{id}`;
+
+        let queryParameters = new URLSearchParams();
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deleteService.');
         }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'DELETE',
-            headers: headerParams,
-            search: queryParameters
-        };
 
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'DELETE',
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
     }
 
     /**
@@ -106,55 +212,70 @@ export class ServiceApi {
      * 
      * @param id 
      */
-    public getService (id: string, extraHttpRequestParams?: any ) : Observable<models.IService> {
-        const path = this.basePath + '/api/Services/{id}'
-            .replace('{' + 'id' + '}', String(id));
+    public getServiceWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/{id}`;
 
         let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getService.');
         }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'GET',
-            headers: headerParams,
-            search: queryParameters
-        };
 
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'GET',
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
     }
 
     /**
      * 
      * 
      */
-    public getServices (extraHttpRequestParams?: any ) : Observable<Array<models.IService>> {
-        const path = this.basePath + '/api/Services';
+    public getServicesWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services`;
 
         let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        let requestOptions: RequestOptionsArgs = {
-            method: 'GET',
-            headers: headerParams,
-            search: queryParameters
-        };
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
 
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'GET',
+            headers: headers,
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
     }
 
     /**
@@ -163,31 +284,39 @@ export class ServiceApi {
      * @param id 
      * @param service 
      */
-    public updateService (id: string, service?: models.IService, extraHttpRequestParams?: any ) : Observable<models.IService> {
-        const path = this.basePath + '/api/Services/{id}'
-            .replace('{' + 'id' + '}', String(id));
+    public updateServiceWithHttpInfo(id: string, service?: models.IService, extraHttpRequestParams?: any): Observable<Response> {
+        const path = this.basePath + `/api/Services/{id}`;
 
         let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
+        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling updateService.');
         }
-        let requestOptions: RequestOptionsArgs = {
-            method: 'PUT',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(service);
 
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
+
+        // to determine the Content-Type header
+        let consumes: string[] = [
+        ];
+
+        // to determine the Accept header
+        let produces: string[] = [
+        ];
+        
+            
+
+        headers.set('Content-Type', 'application/json');
+
+
+        let requestOptions: RequestOptionsArgs = new RequestOptions({
+            method: 'PUT',
+            headers: headers,
+            body: service == null ? '' : JSON.stringify(service), // https://github.com/angular/angular/issues/10612
+            search: queryParameters,
+            responseType: ResponseContentType.Json
+        });
+
+        return this.http.request(path, requestOptions);
     }
 
 }

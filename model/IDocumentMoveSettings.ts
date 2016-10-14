@@ -22,20 +22,17 @@
  * limitations under the License.
  */
 
-'use strict';
 import * as models from './models';
 
 export interface IDocumentMoveSettings {
-    
-
     /**
      * The Id list of the documents you want to move
      */
-    DocumentIdList?: Array<string>;
+    DocumentIdList: Array<string>;
 
     /**
      * The DataSet name where you want to move the selected documents
      */
-    TargetDataSetName?: string;
-}
+    TargetDataSetName: string;
 
+}

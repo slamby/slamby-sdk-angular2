@@ -22,15 +22,12 @@
  * limitations under the License.
  */
 
-'use strict';
 import * as models from './models';
 
 export interface IDocumentBulkSettings {
-    
-
     /**
      * Array of the documents to be saved
      */
-    Documents?: Array<any>;
-}
+    Documents: Array<any>;
 
+}

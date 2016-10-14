@@ -22,15 +22,12 @@
  * limitations under the License.
  */
 
-'use strict';
 import * as models from './models';
 
 /**
  * Tag path item object
  */
 export interface IPathItem {
-    
-
     /**
      * Id of the Tag
      */
@@ -45,5 +42,5 @@ export interface IPathItem {
      * Level of the Tag
      */
     Level?: number;
-}
 
+}

@@ -22,18 +22,15 @@
  * limitations under the License.
  */
 
-'use strict';
 import * as models from './models';
 
 /**
  * Stores complete tag hierarchy for bulk insert
  */
 export interface ITagBulkSettings {
-    
-
     /**
      * The complete tag hierarchy array
      */
-    Tags?: Array<models.ITag>;
-}
+    Tags: Array<models.ITag>;
 
+}

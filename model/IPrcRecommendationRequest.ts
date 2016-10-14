@@ -22,13 +22,10 @@
  * limitations under the License.
  */
 
-'use strict';
 import * as models from './models';
 
 export interface IPrcRecommendationRequest {
-    
-
-    Text?: string;
+    Text: string;
 
     Filter?: models.IFilter;
 
@@ -39,5 +36,5 @@ export interface IPrcRecommendationRequest {
     TagId?: string;
 
     Weights?: Array<models.IWeight>;
-}
 
+}
