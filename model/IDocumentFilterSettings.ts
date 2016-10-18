@@ -22,10 +22,13 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 export interface IDocumentFilterSettings {
-    Pagination: models.IPagination;
+    
+
+    Pagination?: models.IPagination;
 
     Order?: models.IOrder;
 
@@ -35,5 +38,5 @@ export interface IDocumentFilterSettings {
      * Query returns only with the specified field(s)
      */
     FieldList?: Array<string>;
-
 }
+

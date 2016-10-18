@@ -22,33 +22,24 @@
  * limitations under the License.
  */
 
-import { Inject, Injectable, Optional }                      from '@angular/core';
-import { Http, Headers, URLSearchParams }                    from '@angular/http';
-import { RequestMethod, RequestOptions, RequestOptionsArgs } from '@angular/http';
-import { Response, ResponseContentType }                     from '@angular/http';
-
-import { Observable }                                        from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-
-import * as models                                           from '../model/models';
-import { BASE_PATH }                                         from '../variables';
-import { Configuration }                                     from '../configuration';
+import {Http, Headers, RequestOptionsArgs, Response, URLSearchParams} from '@angular/http';
+import {Injectable, Optional} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
+import * as models from '../model/models';
+import 'rxjs/Rx';
 
 /* tslint:disable:no-unused-variable member-ordering */
 
+'use strict';
 
 @Injectable()
 export class HelperApi {
     protected basePath = 'https://localhost/';
-    public defaultHeaders: Headers = new Headers();
-    public configuration: Configuration = new Configuration();
+    public defaultHeaders : Headers = new Headers();
 
-    constructor(protected http: Http, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected http: Http, @Optional() basePath: string) {
         if (basePath) {
             this.basePath = basePath;
-        }
-        if (configuration) {
-            this.configuration = configuration;
         }
     }
 
@@ -57,52 +48,26 @@ export class HelperApi {
      * 
      * @param fileParser 
      */
-    public fileParser(fileParser?: models.IFileParser, extraHttpRequestParams?: any): Observable<models.IFileParserResult> {
-        return this.fileParserWithHttpInfo(fileParser, extraHttpRequestParams)
+    public fileParser (fileParser?: models.IFileParser, extraHttpRequestParams?: any ) : Observable<models.IFileParserResult> {
+        const path = this.basePath + '/api/Helper/FileParser';
+
+        let queryParameters = new URLSearchParams();
+        let headerParams = this.defaultHeaders;
+        let requestOptions: RequestOptionsArgs = {
+            method: 'POST',
+            headers: headerParams,
+            search: queryParameters
+        };
+        requestOptions.body = JSON.stringify(fileParser);
+
+        return this.http.request(path, requestOptions)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
                 } else {
-                    return response.json();
+                    return response.text() ? response.json() : undefined;
                 }
             });
-    }
-
-
-    /**
-     * 
-     * 
-     * @param fileParser 
-     */
-    public fileParserWithHttpInfo(fileParser?: models.IFileParser, extraHttpRequestParams?: any): Observable<Response> {
-        const path = this.basePath + `/api/Helper/FileParser`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-        ];
-        
-            
-
-        headers.set('Content-Type', 'application/json');
-
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: 'POST',
-            headers: headers,
-            body: fileParser == null ? '' : JSON.stringify(fileParser), // https://github.com/angular/angular/issues/10612
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions);
     }
 
 }

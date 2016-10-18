@@ -22,12 +22,15 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 /**
  * Contains calculated values for the tag
  */
 export interface ITagProperties {
+    
+
     /**
      * A tag list contains parent path elements
      */
@@ -52,5 +55,5 @@ export interface ITagProperties {
      * Word count for the tag
      */
     WordCount?: number;
-
 }
+

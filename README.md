@@ -1,4 +1,4 @@
-## slamby-sdk-angular2@1.0.4
+## slamby-sdk-angular2@1.0.6
 
 ### Building
 
@@ -19,7 +19,7 @@ navigate to the folder of your consuming project and run one of next commando's.
 _published:_
 
 ```
-npm install slamby-sdk-angular2@1.0.4 --save
+npm install slamby-sdk-angular2@1.0.6 --save
 ```
 
 _unPublished (not recommended):_
@@ -31,14 +31,3 @@ npm install PATH_TO_GENERATED_PACKAGE --save
 In your angular2 project:
 
 TODO: paste example.
-
-### Set service base path
-If different than the generated base path, during app bootstrap, you can provide the base path to your service. 
-
-```
-import { BASE_PATH } from './path-to-swagger-gen-service/index';
-
-bootstrap(AppComponent, [
-    { provide: BASE_PATH, useValue: 'https://your-web-service.com' },
-]);
-```  

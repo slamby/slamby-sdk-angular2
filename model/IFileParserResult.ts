@@ -22,12 +22,15 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 /**
  * File Parser result object
  */
 export interface IFileParserResult {
+    
+
     /**
      * The text content of sent document. Can be empty.
      */
@@ -64,5 +67,5 @@ export interface IFileParserResult {
      * Detected language of the document (e.g.: en). Can be empty.
      */
     Language?: string;
-
 }
+

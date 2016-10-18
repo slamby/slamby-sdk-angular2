@@ -22,16 +22,19 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 /**
  * These settings are required for the training (Prepare method)
  */
 export interface IClassifierPrepareSettings {
+    
+
     /**
      * The DataSet name where the Classifier will be trained from
      */
-    DataSetName: string;
+    DataSetName?: string;
 
     /**
      * The list of the tag Ids which will be trained
@@ -41,7 +44,7 @@ export interface IClassifierPrepareSettings {
     /**
      * The list of the NGrams which will be trained. The maximum NGram can be the DataSet's NGram
      */
-    NGramList: Array<number>;
+    NGramList?: Array<number>;
 
     /**
      * 
@@ -52,5 +55,5 @@ export interface IClassifierPrepareSettings {
      * 
      */
     CompressSettings?: models.ICompressSettings;
-
 }
+

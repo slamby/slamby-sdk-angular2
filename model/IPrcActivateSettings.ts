@@ -22,9 +22,12 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 export interface IPrcActivateSettings {
-    FieldsForRecommendation?: Array<string>;
+    
 
+    FieldsForRecommendation?: Array<string>;
 }
+

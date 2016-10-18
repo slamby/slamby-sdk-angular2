@@ -22,12 +22,15 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 /**
  * \"Result of a bulk save element.              If the save was successful then the StatusCode is 2XX.               If there was a problem, the StatusCode is not 2XX, and the error message is in the Error field.
  */
 export interface IBulkResult {
+    
+
     /**
      * HTTP status code
      */
@@ -42,5 +45,5 @@ export interface IBulkResult {
      * Error message
      */
     Error?: string;
-
 }
+

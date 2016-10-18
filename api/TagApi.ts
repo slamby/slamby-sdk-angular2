@@ -22,34 +22,25 @@
  * limitations under the License.
  */
 
-import { Inject, Injectable, Optional }                      from '@angular/core';
-import { Http, Headers, URLSearchParams }                    from '@angular/http';
-import { RequestMethod, RequestOptions, RequestOptionsArgs } from '@angular/http';
-import { Response, ResponseContentType }                     from '@angular/http';
-
-import { Observable }                                        from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-
-import * as models                                           from '../model/models';
-import { BASE_PATH }                                         from '../variables';
-import { Configuration }                                     from '../configuration';
+import {Http, Headers, RequestOptionsArgs, Response, URLSearchParams} from '@angular/http';
+import {Injectable, Optional} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
+import * as models from '../model/models';
+import 'rxjs/Rx';
 
 /* tslint:disable:no-unused-variable member-ordering */
 
+'use strict';
 
 @Injectable()
 export class TagApi {
     protected basePath = 'https://localhost/';
-    public defaultHeaders: Headers = new Headers();
-    public configuration: Configuration = new Configuration();
+    public defaultHeaders : Headers = new Headers();
 
-    constructor(protected http: Http, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected http: Http, @Optional() basePath: string) {
         if (basePath) {
             this.basePath = basePath;
         }
-        if (configuration) {
-            this.configuration = configuration;
-        }
     }
 
     /**
@@ -57,13 +48,24 @@ export class TagApi {
      * 
      * @param settings 
      */
-    public bulkTags(settings?: models.ITagBulkSettings, extraHttpRequestParams?: any): Observable<models.IBulkResults> {
-        return this.bulkTagsWithHttpInfo(settings, extraHttpRequestParams)
+    public bulkTags (settings?: models.ITagBulkSettings, extraHttpRequestParams?: any ) : Observable<models.IBulkResults> {
+        const path = this.basePath + '/api/Tags/Bulk';
+
+        let queryParameters = new URLSearchParams();
+        let headerParams = this.defaultHeaders;
+        let requestOptions: RequestOptionsArgs = {
+            method: 'POST',
+            headers: headerParams,
+            search: queryParameters
+        };
+        requestOptions.body = JSON.stringify(settings);
+
+        return this.http.request(path, requestOptions)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
                 } else {
-                    return response.json();
+                    return response.text() ? response.json() : undefined;
                 }
             });
     }
@@ -72,13 +74,23 @@ export class TagApi {
      * 
      * 
      */
-    public cleanDocuments(extraHttpRequestParams?: any): Observable<{}> {
-        return this.cleanDocumentsWithHttpInfo(extraHttpRequestParams)
+    public cleanDocuments (extraHttpRequestParams?: any ) : Observable<{}> {
+        const path = this.basePath + '/api/Tags/CleanDocuments';
+
+        let queryParameters = new URLSearchParams();
+        let headerParams = this.defaultHeaders;
+        let requestOptions: RequestOptionsArgs = {
+            method: 'POST',
+            headers: headerParams,
+            search: queryParameters
+        };
+
+        return this.http.request(path, requestOptions)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
                 } else {
-                    return response.json();
+                    return response.text() ? response.json() : undefined;
                 }
             });
     }
@@ -88,13 +100,24 @@ export class TagApi {
      * 
      * @param tag 
      */
-    public createTag(tag?: models.ITag, extraHttpRequestParams?: any): Observable<models.ITag> {
-        return this.createTagWithHttpInfo(tag, extraHttpRequestParams)
+    public createTag (tag?: models.ITag, extraHttpRequestParams?: any ) : Observable<models.ITag> {
+        const path = this.basePath + '/api/Tags';
+
+        let queryParameters = new URLSearchParams();
+        let headerParams = this.defaultHeaders;
+        let requestOptions: RequestOptionsArgs = {
+            method: 'POST',
+            headers: headerParams,
+            search: queryParameters
+        };
+        requestOptions.body = JSON.stringify(tag);
+
+        return this.http.request(path, requestOptions)
             .map((response: Response) => {
                 if (response.status === 204) {
                     return undefined;
                 } else {
-                    return response.json();
+                    return response.text() ? response.json() : undefined;
                 }
             });
     }
@@ -106,233 +129,38 @@ export class TagApi {
      * @param force 
      * @param cleanDocuments 
      */
-    public deleteTag(id: string, force?: boolean, cleanDocuments?: boolean, extraHttpRequestParams?: any): Observable<{}> {
-        return this.deleteTagWithHttpInfo(id, force, cleanDocuments, extraHttpRequestParams)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
-    }
-
-    /**
-     * 
-     * 
-     * @param id 
-     * @param withDetails 
-     */
-    public getTag(id: string, withDetails?: boolean, extraHttpRequestParams?: any): Observable<models.ITag> {
-        return this.getTagWithHttpInfo(id, withDetails, extraHttpRequestParams)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
-    }
-
-    /**
-     * 
-     * 
-     * @param withDetails 
-     */
-    public getTags(withDetails?: boolean, extraHttpRequestParams?: any): Observable<Array<models.ITag>> {
-        return this.getTagsWithHttpInfo(withDetails, extraHttpRequestParams)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
-    }
-
-    /**
-     * 
-     * 
-     * @param id 
-     * @param tag 
-     */
-    public updateTag(id: string, tag?: models.ITag, extraHttpRequestParams?: any): Observable<{}> {
-        return this.updateTagWithHttpInfo(id, tag, extraHttpRequestParams)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
-    }
-
-    /**
-     * 
-     * 
-     * @param settings 
-     */
-    public wordsExport(settings?: models.ITagsExportWordsSettings, extraHttpRequestParams?: any): Observable<models.IProcess> {
-        return this.wordsExportWithHttpInfo(settings, extraHttpRequestParams)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
-    }
-
-
-    /**
-     * 
-     * 
-     * @param settings 
-     */
-    public bulkTagsWithHttpInfo(settings?: models.ITagBulkSettings, extraHttpRequestParams?: any): Observable<Response> {
-        const path = this.basePath + `/api/Tags/Bulk`;
+    public deleteTag (id: string, force?: boolean, cleanDocuments?: boolean, extraHttpRequestParams?: any ) : Observable<{}> {
+        const path = this.basePath + '/api/Tags/{id}'
+            .replace('{' + 'id' + '}', String(id));
 
         let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-        ];
-        
-            
-
-        headers.set('Content-Type', 'application/json');
-
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: 'POST',
-            headers: headers,
-            body: settings == null ? '' : JSON.stringify(settings), // https://github.com/angular/angular/issues/10612
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions);
-    }
-
-    /**
-     * 
-     * 
-     */
-    public cleanDocumentsWithHttpInfo(extraHttpRequestParams?: any): Observable<Response> {
-        const path = this.basePath + `/api/Tags/CleanDocuments`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-        ];
-        
-            
-
-
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: 'POST',
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions);
-    }
-
-    /**
-     * 
-     * 
-     * @param tag 
-     */
-    public createTagWithHttpInfo(tag?: models.ITag, extraHttpRequestParams?: any): Observable<Response> {
-        const path = this.basePath + `/api/Tags`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-        ];
-        
-            
-
-        headers.set('Content-Type', 'application/json');
-
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
-            method: 'POST',
-            headers: headers,
-            body: tag == null ? '' : JSON.stringify(tag), // https://github.com/angular/angular/issues/10612
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
-
-        return this.http.request(path, requestOptions);
-    }
-
-    /**
-     * 
-     * 
-     * @param id 
-     * @param force 
-     * @param cleanDocuments 
-     */
-    public deleteTagWithHttpInfo(id: string, force?: boolean, cleanDocuments?: boolean, extraHttpRequestParams?: any): Observable<Response> {
-        const path = this.basePath + `/api/Tags/{id}`;
-
-        let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        let headerParams = this.defaultHeaders;
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deleteTag.');
         }
         if (force !== undefined) {
-            queryParameters.set('force', <any>force);
+            queryParameters.set('force', String(force));
         }
+
         if (cleanDocuments !== undefined) {
-            queryParameters.set('cleanDocuments', <any>cleanDocuments);
+            queryParameters.set('cleanDocuments', String(cleanDocuments));
         }
 
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-        ];
-        
-            
-
-
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
+        let requestOptions: RequestOptionsArgs = {
             method: 'DELETE',
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
+            headers: headerParams,
+            search: queryParameters
+        };
 
-        return this.http.request(path, requestOptions);
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.text() ? response.json() : undefined;
+                }
+            });
     }
 
     /**
@@ -341,40 +169,34 @@ export class TagApi {
      * @param id 
      * @param withDetails 
      */
-    public getTagWithHttpInfo(id: string, withDetails?: boolean, extraHttpRequestParams?: any): Observable<Response> {
-        const path = this.basePath + `/api/Tags/{id}`;
+    public getTag (id: string, withDetails?: boolean, extraHttpRequestParams?: any ) : Observable<models.ITag> {
+        const path = this.basePath + '/api/Tags/{id}'
+            .replace('{' + 'id' + '}', String(id));
 
         let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        let headerParams = this.defaultHeaders;
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getTag.');
         }
         if (withDetails !== undefined) {
-            queryParameters.set('withDetails', <any>withDetails);
+            queryParameters.set('withDetails', String(withDetails));
         }
 
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-        ];
-        
-            
-
-
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
+        let requestOptions: RequestOptionsArgs = {
             method: 'GET',
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
+            headers: headerParams,
+            search: queryParameters
+        };
 
-        return this.http.request(path, requestOptions);
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.text() ? response.json() : undefined;
+                }
+            });
     }
 
     /**
@@ -382,36 +204,29 @@ export class TagApi {
      * 
      * @param withDetails 
      */
-    public getTagsWithHttpInfo(withDetails?: boolean, extraHttpRequestParams?: any): Observable<Response> {
-        const path = this.basePath + `/api/Tags`;
+    public getTags (withDetails?: boolean, extraHttpRequestParams?: any ) : Observable<Array<models.ITag>> {
+        const path = this.basePath + '/api/Tags';
 
         let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        let headerParams = this.defaultHeaders;
         if (withDetails !== undefined) {
-            queryParameters.set('withDetails', <any>withDetails);
+            queryParameters.set('withDetails', String(withDetails));
         }
 
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-        ];
-        
-            
-
-
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
+        let requestOptions: RequestOptionsArgs = {
             method: 'GET',
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
+            headers: headerParams,
+            search: queryParameters
+        };
 
-        return this.http.request(path, requestOptions);
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.text() ? response.json() : undefined;
+                }
+            });
     }
 
     /**
@@ -420,39 +235,31 @@ export class TagApi {
      * @param id 
      * @param tag 
      */
-    public updateTagWithHttpInfo(id: string, tag?: models.ITag, extraHttpRequestParams?: any): Observable<Response> {
-        const path = this.basePath + `/api/Tags/{id}`;
+    public updateTag (id: string, tag?: models.ITag, extraHttpRequestParams?: any ) : Observable<{}> {
+        const path = this.basePath + '/api/Tags/{id}'
+            .replace('{' + 'id' + '}', String(id));
 
         let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        let headerParams = this.defaultHeaders;
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling updateTag.');
         }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-        ];
-        
-            
-
-        headers.set('Content-Type', 'application/json');
-
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
+        let requestOptions: RequestOptionsArgs = {
             method: 'PUT',
-            headers: headers,
-            body: tag == null ? '' : JSON.stringify(tag), // https://github.com/angular/angular/issues/10612
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
+            headers: headerParams,
+            search: queryParameters
+        };
+        requestOptions.body = JSON.stringify(tag);
 
-        return this.http.request(path, requestOptions);
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.text() ? response.json() : undefined;
+                }
+            });
     }
 
     /**
@@ -460,35 +267,26 @@ export class TagApi {
      * 
      * @param settings 
      */
-    public wordsExportWithHttpInfo(settings?: models.ITagsExportWordsSettings, extraHttpRequestParams?: any): Observable<Response> {
-        const path = this.basePath + `/api/Tags/ExportWords`;
+    public wordsExport (settings?: models.ITagsExportWordsSettings, extraHttpRequestParams?: any ) : Observable<models.IProcess> {
+        const path = this.basePath + '/api/Tags/ExportWords';
 
         let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-        ];
-        
-            
-
-        headers.set('Content-Type', 'application/json');
-
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
+        let headerParams = this.defaultHeaders;
+        let requestOptions: RequestOptionsArgs = {
             method: 'POST',
-            headers: headers,
-            body: settings == null ? '' : JSON.stringify(settings), // https://github.com/angular/angular/issues/10612
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
+            headers: headerParams,
+            search: queryParameters
+        };
+        requestOptions.body = JSON.stringify(settings);
 
-        return this.http.request(path, requestOptions);
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.text() ? response.json() : undefined;
+                }
+            });
     }
 
 }

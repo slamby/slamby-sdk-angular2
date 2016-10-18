@@ -22,9 +22,12 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 export interface IClassifierRecommendationResult {
+    
+
     /**
      * The recommended tag id
      */
@@ -41,5 +44,5 @@ export interface IClassifierRecommendationResult {
      * If there was applied emphasizing by this tag
      */
     IsEmphasized?: boolean;
-
 }
+

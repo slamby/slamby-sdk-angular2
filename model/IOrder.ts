@@ -22,9 +22,12 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 export interface IOrder {
+    
+
     /**
      * The ordering of the list, Ascending or Descending
      */
@@ -34,11 +37,12 @@ export interface IOrder {
      * It must be an existing field. Declares the base of the ordering
      */
     OrderByField?: string;
-
 }
+
 export namespace IOrder {
-    export enum IOrderDirectionEnum {
+
+    export enum IOrderDirectionEnum { 
         Asc = <any> 'Asc',
-        Desc = <any> 'Desc'
+        Desc = <any> 'Desc',
     }
 }

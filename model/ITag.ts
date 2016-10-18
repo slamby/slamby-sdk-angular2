@@ -22,21 +22,24 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 /**
  * Tag object
  */
 export interface ITag {
+    
+
     /**
      * The identifier of the tag. It must be unique across the DataSet
      */
-    Id: string;
+    Id?: string;
 
     /**
      * \"Name of the tag
      */
-    Name: string;
+    Name?: string;
 
     /**
      * The identifier of the parent of the tag. It must be the id of an existing tag
@@ -47,5 +50,5 @@ export interface ITag {
      * Tag properties
      */
     Properties?: models.ITagProperties;
-
 }
+

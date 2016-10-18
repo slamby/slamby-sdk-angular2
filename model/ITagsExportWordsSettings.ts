@@ -22,14 +22,17 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 /**
  * 
  */
 export interface ITagsExportWordsSettings {
+    
+
     TagIdList?: Array<string>;
 
-    NGramList: Array<number>;
-
+    NGramList?: Array<number>;
 }
+

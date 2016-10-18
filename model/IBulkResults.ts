@@ -22,12 +22,15 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 export interface IBulkResults {
+    
+
     /**
      * Array of the documents to be saved
      */
     Results?: Array<models.IBulkResult>;
-
 }
+

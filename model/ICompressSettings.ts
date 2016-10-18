@@ -22,9 +22,12 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 export interface ICompressSettings {
+    
+
     /**
      * 
      */
@@ -39,11 +42,12 @@ export interface ICompressSettings {
      * 
      */
     Operator?: ICompressSettings.IOperatorEnum;
-
 }
+
 export namespace ICompressSettings {
-    export enum IOperatorEnum {
+
+    export enum IOperatorEnum { 
         AND = <any> 'AND',
-        OR = <any> 'OR'
+        OR = <any> 'OR',
     }
 }

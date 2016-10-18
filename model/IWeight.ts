@@ -22,17 +22,20 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 /**
  * Weight object
  */
 export interface IWeight {
+    
+
     /**
      * Set here the filters. The value is the query string you want to apply.               Can be BOOL expressions. You can use these: AND, OR, NOT.               For example: 'searchforthis AND NOT butnotthis'.               Also you can use wildcards. For example: 'exampl*'.               If you want to search in a specified field, than do this: 'title:searchthisinthetitle'
      */
     Query?: string;
 
     Value?: number;
-
 }
+

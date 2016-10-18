@@ -22,34 +22,25 @@
  * limitations under the License.
  */
 
-import { Inject, Injectable, Optional }                      from '@angular/core';
-import { Http, Headers, URLSearchParams }                    from '@angular/http';
-import { RequestMethod, RequestOptions, RequestOptionsArgs } from '@angular/http';
-import { Response, ResponseContentType }                     from '@angular/http';
-
-import { Observable }                                        from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-
-import * as models                                           from '../model/models';
-import { BASE_PATH }                                         from '../variables';
-import { Configuration }                                     from '../configuration';
+import {Http, Headers, RequestOptionsArgs, Response, URLSearchParams} from '@angular/http';
+import {Injectable, Optional} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
+import * as models from '../model/models';
+import 'rxjs/Rx';
 
 /* tslint:disable:no-unused-variable member-ordering */
 
+'use strict';
 
 @Injectable()
 export class ProcessApi {
     protected basePath = 'https://localhost/';
-    public defaultHeaders: Headers = new Headers();
-    public configuration: Configuration = new Configuration();
+    public defaultHeaders : Headers = new Headers();
 
-    constructor(protected http: Http, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected http: Http, @Optional() basePath: string) {
         if (basePath) {
             this.basePath = basePath;
         }
-        if (configuration) {
-            this.configuration = configuration;
-        }
     }
 
     /**
@@ -57,86 +48,30 @@ export class ProcessApi {
      * 
      * @param id 
      */
-    public cancelProcess(id: string, extraHttpRequestParams?: any): Observable<{}> {
-        return this.cancelProcessWithHttpInfo(id, extraHttpRequestParams)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
-    }
-
-    /**
-     * 
-     * 
-     * @param id 
-     */
-    public getProcess(id: string, extraHttpRequestParams?: any): Observable<models.IProcess> {
-        return this.getProcessWithHttpInfo(id, extraHttpRequestParams)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
-    }
-
-    /**
-     * 
-     * 
-     * @param allStatus 
-     */
-    public getProcesses(allStatus?: boolean, extraHttpRequestParams?: any): Observable<Array<models.IProcess>> {
-        return this.getProcessesWithHttpInfo(allStatus, extraHttpRequestParams)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.json();
-                }
-            });
-    }
-
-
-    /**
-     * 
-     * 
-     * @param id 
-     */
-    public cancelProcessWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
-        const path = this.basePath + `/api/Processes/{id}/Cancel`;
+    public cancelProcess (id: string, extraHttpRequestParams?: any ) : Observable<{}> {
+        const path = this.basePath + '/api/Processes/{id}/Cancel'
+            .replace('{' + 'id' + '}', String(id));
 
         let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        let headerParams = this.defaultHeaders;
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling cancelProcess.');
         }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-        ];
-        
-            
-
-
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
+        let requestOptions: RequestOptionsArgs = {
             method: 'POST',
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
+            headers: headerParams,
+            search: queryParameters
+        };
 
-        return this.http.request(path, requestOptions);
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.text() ? response.json() : undefined;
+                }
+            });
     }
 
     /**
@@ -144,37 +79,30 @@ export class ProcessApi {
      * 
      * @param id 
      */
-    public getProcessWithHttpInfo(id: string, extraHttpRequestParams?: any): Observable<Response> {
-        const path = this.basePath + `/api/Processes/{id}`;
+    public getProcess (id: string, extraHttpRequestParams?: any ) : Observable<models.IProcess> {
+        const path = this.basePath + '/api/Processes/{id}'
+            .replace('{' + 'id' + '}', String(id));
 
         let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        let headerParams = this.defaultHeaders;
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getProcess.');
         }
-
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-        ];
-        
-            
-
-
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
+        let requestOptions: RequestOptionsArgs = {
             method: 'GET',
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
+            headers: headerParams,
+            search: queryParameters
+        };
 
-        return this.http.request(path, requestOptions);
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.text() ? response.json() : undefined;
+                }
+            });
     }
 
     /**
@@ -182,36 +110,29 @@ export class ProcessApi {
      * 
      * @param allStatus 
      */
-    public getProcessesWithHttpInfo(allStatus?: boolean, extraHttpRequestParams?: any): Observable<Response> {
-        const path = this.basePath + `/api/Processes`;
+    public getProcesses (allStatus?: boolean, extraHttpRequestParams?: any ) : Observable<Array<models.IProcess>> {
+        const path = this.basePath + '/api/Processes';
 
         let queryParameters = new URLSearchParams();
-        let headers = new Headers(this.defaultHeaders.toJSON()); // https://github.com/angular/angular/issues/6845
+        let headerParams = this.defaultHeaders;
         if (allStatus !== undefined) {
-            queryParameters.set('allStatus', <any>allStatus);
+            queryParameters.set('allStatus', String(allStatus));
         }
 
-
-        // to determine the Content-Type header
-        let consumes: string[] = [
-        ];
-
-        // to determine the Accept header
-        let produces: string[] = [
-        ];
-        
-            
-
-
-
-        let requestOptions: RequestOptionsArgs = new RequestOptions({
+        let requestOptions: RequestOptionsArgs = {
             method: 'GET',
-            headers: headers,
-            search: queryParameters,
-            responseType: ResponseContentType.Json
-        });
+            headers: headerParams,
+            search: queryParameters
+        };
 
-        return this.http.request(path, requestOptions);
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.text() ? response.json() : undefined;
+                }
+            });
     }
 
 }

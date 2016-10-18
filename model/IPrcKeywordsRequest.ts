@@ -22,17 +22,20 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 export interface IPrcKeywordsRequest {
+    
+
     /**
      * The text which you want to extract the keywords from
      */
-    Text: string;
+    Text?: string;
 
     /**
      * The extracting keywords calculation depends on this Tag
      */
-    TagId: string;
-
+    TagId?: string;
 }
+

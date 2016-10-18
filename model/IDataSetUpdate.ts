@@ -22,15 +22,18 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 /**
  * DataSet update object
  */
 export interface IDataSetUpdate {
+    
+
     /**
      * Name of your dataset. Can contains just A-Z letters, numbers, _ (underscore) and - (hyphen) without any space. This field is unique
      */
-    Name: string;
-
+    Name?: string;
 }
+

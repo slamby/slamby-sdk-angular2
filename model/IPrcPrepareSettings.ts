@@ -22,10 +22,13 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 export interface IPrcPrepareSettings {
-    DataSetName: string;
+    
+
+    DataSetName?: string;
 
     /**
      * 
@@ -41,5 +44,5 @@ export interface IPrcPrepareSettings {
      * 
      */
     CompressSettings?: models.ICompressSettings;
-
 }
+

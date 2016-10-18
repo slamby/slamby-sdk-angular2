@@ -22,15 +22,18 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 /**
  * DataSetStats object
  */
 export interface IDataSetStats {
+    
+
     /**
      * Shows the available document number
      */
     DocumentsCount?: number;
-
 }
+

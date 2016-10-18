@@ -22,12 +22,15 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 export interface IPagination {
+    
+
     /**
      * How many element you want to get back in this request
      */
     Limit?: number;
-
 }
+

@@ -22,15 +22,18 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 /**
  * File parser request
  */
 export interface IFileParser {
+    
+
     /**
      * Valid base64 document content
      */
-    Content: string;
-
+    Content?: string;
 }
+

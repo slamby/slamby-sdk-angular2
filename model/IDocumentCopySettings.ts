@@ -22,17 +22,20 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 export interface IDocumentCopySettings {
+    
+
     /**
      * The Id list of the documents you want to copy
      */
-    DocumentIdList: Array<string>;
+    DocumentIdList?: Array<string>;
 
     /**
      * The DataSet name where you want to copy the selected documents
      */
-    TargetDataSetName: string;
-
+    TargetDataSetName?: string;
 }
+

@@ -22,12 +22,15 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 /**
  * Status object
  */
 export interface IStatus {
+    
+
     /**
      * API version string
      */
@@ -57,5 +60,5 @@ export interface IStatus {
      * Free physical memory in MB
      */
     FreeMemory?: number;
-
 }
+

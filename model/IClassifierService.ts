@@ -22,12 +22,15 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 /**
  * For the common properties detail check the [Service](#/definitions/Service)
  */
 export interface IClassifierService {
+    
+
     PrepareSettings?: models.IClassifierPrepareSettings;
 
     ActivateSettings?: models.IClassifierActivateSettings;
@@ -40,7 +43,7 @@ export interface IClassifierService {
     /**
      * User-defined name for the service
      */
-    Name: string;
+    Name?: string;
 
     /**
      * Alias name of the service. Services can be accessed via this name.              Alias can be modified. It is unique amongst the services.
@@ -60,7 +63,7 @@ export interface IClassifierService {
     /**
      * Type of the service.              Currently supported types:              - Classifier              - Prc
      */
-    Type: IClassifierService.ITypeEnum;
+    Type?: IClassifierService.ITypeEnum;
 
     /**
      * Contains all the process ids which belong to this service
@@ -68,17 +71,19 @@ export interface IClassifierService {
     ProcessIdList?: Array<string>;
 
     ActualProcessId?: string;
-
 }
+
 export namespace IClassifierService {
-    export enum IStatusEnum {
+
+    export enum IStatusEnum { 
         New = <any> 'New',
         Busy = <any> 'Busy',
         Prepared = <any> 'Prepared',
-        Active = <any> 'Active'
+        Active = <any> 'Active',
     }
-    export enum ITypeEnum {
+
+    export enum ITypeEnum { 
         Classifier = <any> 'Classifier',
-        Prc = <any> 'Prc'
+        Prc = <any> 'Prc',
     }
 }

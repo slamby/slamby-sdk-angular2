@@ -22,13 +22,16 @@
  * limitations under the License.
  */
 
+'use strict';
 import * as models from './models';
 
 export interface IDocumentSampleSettings {
+    
+
     /**
      * It must be a random string for every new sampling, but must be the same for the same sampling during pagination.               If you leave it empty then it'll be generated automatically, but then you can not use pagination
      */
-    Id: string;
+    Id?: string;
 
     /**
      * You can create a sample from a whole dataset, or just from a given tag section.               To create a sample from the whole dataset please keep it empty.               To create a sample from a given number of tags please provide the tag ids
@@ -49,5 +52,5 @@ export interface IDocumentSampleSettings {
      * Query returns only with the specified field(s)
      */
     FieldList?: Array<string>;
-
 }
+
