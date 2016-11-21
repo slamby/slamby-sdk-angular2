@@ -1,5 +1,7 @@
 export * from './IBulkResult';
 export * from './IBulkResults';
+export * from './IChangeLicense';
+export * from './IChangeSecret';
 export * from './IClassifierActivateSettings';
 export * from './IClassifierPrepareSettings';
 export * from './IClassifierRecommendationRequest';
@@ -19,6 +21,7 @@ export * from './IExportDictionariesSettings';
 export * from './IFileParser';
 export * from './IFileParserResult';
 export * from './IFilter';
+export * from './ILicense';
 export * from './IOrder';
 export * from './IPaginatedListObject';
 export * from './IPagination';

@@ -33,7 +33,7 @@ import 'rxjs/Rx';
 'use strict';
 
 @Injectable()
-export class HelperApi {
+export class LicenseApi {
     protected basePath = 'https://localhost/';
     public defaultHeaders : Headers = new Headers();
 
@@ -46,10 +46,10 @@ export class HelperApi {
     /**
      * 
      * 
-     * @param fileParser 
+     * @param model 
      */
-    public fileParser (fileParser?: models.IFileParser, extraHttpRequestParams?: any ) : Observable<models.IFileParserResult> {
-        const path = this.basePath + '/api/Helper/FileParser';
+    public changeLicense (model?: models.IChangeLicense, extraHttpRequestParams?: any ) : Observable<{}> {
+        const path = this.basePath + '/api/License';
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
@@ -58,7 +58,32 @@ export class HelperApi {
             headers: headerParams,
             search: queryParameters
         };
-        requestOptions.body = JSON.stringify(fileParser);
+        requestOptions.body = JSON.stringify(model);
+
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.text() ? response.json() : undefined;
+                }
+            });
+    }
+
+    /**
+     * 
+     * 
+     */
+    public getLicense (extraHttpRequestParams?: any ) : Observable<models.ILicense> {
+        const path = this.basePath + '/api/License';
+
+        let queryParameters = new URLSearchParams();
+        let headerParams = this.defaultHeaders;
+        let requestOptions: RequestOptionsArgs = {
+            method: 'GET',
+            headers: headerParams,
+            search: queryParameters
+        };
 
         return this.http.request(path, requestOptions)
             .map((response: Response) => {

@@ -25,17 +25,9 @@
 'use strict';
 import * as models from './models';
 
-export interface IPrcKeywordsRequest {
+export interface IChangeLicense {
     
 
-    /**
-     * The text which you want to extract the keywords from
-     */
-    Text?: string;
-
-    /**
-     * The extracting keywords calculation depends on this Tag
-     */
-    TagId?: string;
+    License?: string;
 }
 

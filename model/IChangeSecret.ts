@@ -25,17 +25,15 @@
 'use strict';
 import * as models from './models';
 
-export interface IPrcKeywordsRequest {
+/**
+ * Change Secret model
+ */
+export interface IChangeSecret {
     
 
     /**
-     * The text which you want to extract the keywords from
+     * New secret to be set
      */
-    Text?: string;
-
-    /**
-     * The extracting keywords calculation depends on this Tag
-     */
-    TagId?: string;
+    Secret?: string;
 }
 

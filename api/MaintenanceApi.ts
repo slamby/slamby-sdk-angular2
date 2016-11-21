@@ -33,7 +33,7 @@ import 'rxjs/Rx';
 'use strict';
 
 @Injectable()
-export class HelperApi {
+export class MaintenanceApi {
     protected basePath = 'https://localhost/';
     public defaultHeaders : Headers = new Headers();
 
@@ -46,10 +46,10 @@ export class HelperApi {
     /**
      * 
      * 
-     * @param fileParser 
+     * @param secret 
      */
-    public fileParser (fileParser?: models.IFileParser, extraHttpRequestParams?: any ) : Observable<models.IFileParserResult> {
-        const path = this.basePath + '/api/Helper/FileParser';
+    public changeSecret (secret?: models.IChangeSecret, extraHttpRequestParams?: any ) : Observable<{}> {
+        const path = this.basePath + '/api/Maintenance/ChangeSecret';
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
@@ -58,7 +58,7 @@ export class HelperApi {
             headers: headerParams,
             search: queryParameters
         };
-        requestOptions.body = JSON.stringify(fileParser);
+        requestOptions.body = JSON.stringify(secret);
 
         return this.http.request(path, requestOptions)
             .map((response: Response) => {
