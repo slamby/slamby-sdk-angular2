@@ -25,25 +25,27 @@
 'use strict';
 import * as models from './models';
 
-/**
- * These settings are required for the recommendation (Recommend method)
- */
-export interface IClassifierActivateSettings {
+export interface ISearchResultWrapper {
     
 
     /**
-     * The list of the tag Ids which will emphasized during the recommendation
+     * List of the AutoComplete suggestions
      */
-    EmphasizedTagIdList?: Array<string>;
+    AutoCompleteResultList?: Array<models.IAutoCompleteResult>;
 
     /**
-     * \"The list of the tag Ids which will be activated (the recommendation will be contains these only)
+     * List of the Classifier results of the input text
      */
-    TagIdList?: Array<string>;
+    ClassifierResultList?: Array<models.ISearchClassifierRecommendationResult>;
 
     /**
-     * The list of the NGrams will be activated (the recommendation algorithm will be use these only)
+     * The matched documents with relevance scores
      */
-    NGramList?: Array<number>;
+    SearchResultList?: Array<models.ISearchResult>;
+
+    /**
+     * The total matched document count
+     */
+    Total?: number;
 }
 

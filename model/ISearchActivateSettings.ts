@@ -25,25 +25,22 @@
 'use strict';
 import * as models from './models';
 
-/**
- * These settings are required for the recommendation (Recommend method)
- */
-export interface IClassifierActivateSettings {
+export interface ISearchActivateSettings {
     
 
     /**
-     * The list of the tag Ids which will emphasized during the recommendation
+     * The AutoComplete settings to activate (as default setting for all search)  For the details of this setting check [AutoCompleteSettings](#/definitions/AutoCompleteSettings)
      */
-    EmphasizedTagIdList?: Array<string>;
+    AutoCompleteSettings?: models.IAutoCompleteSettings;
 
     /**
-     * \"The list of the tag Ids which will be activated (the recommendation will be contains these only)
+     * The Search settings to activate (as default setting for all search)  For the details of this setting check [SearchSettings](#/definitions/SearchSettings)
      */
-    TagIdList?: Array<string>;
+    SearchSettings?: models.ISearchSettings;
 
     /**
-     * The list of the NGrams will be activated (the recommendation algorithm will be use these only)
+     * The Classifier settings to activate (as default setting for all search)  For the details of this setting check [ClassifierSettings](#/definitions/ClassifierSettings)
      */
-    NGramList?: Array<number>;
+    ClassifierSettings?: models.IClassifierSettings;
 }
 

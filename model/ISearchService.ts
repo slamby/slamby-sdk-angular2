@@ -25,14 +25,15 @@
 'use strict';
 import * as models from './models';
 
-export interface IPrcService {
+/**
+ * For the common properties detail check the [Service](#/definitions/Service)
+ */
+export interface ISearchService {
     
 
-    PrepareSettings?: models.IPrcPrepareSettings;
+    PrepareSettings?: models.ISearchPrepareSettings;
 
-    ActivateSettings?: models.IPrcActivateSettings;
-
-    IndexSettings?: models.IPrcIndexSettings;
+    ActivateSettings?: models.ISearchActivateSettings;
 
     /**
      * Service unique identifier. It cannot be modified.
@@ -57,12 +58,12 @@ export interface IPrcService {
     /**
      * New - the service was created |   Busy - the service is working on something (e.g.: during the Prepare) |   Prepared - the service was prepared so you can activate it to use |   Active - the service so you can use it
      */
-    Status?: IPrcService.IStatusEnum;
+    Status?: ISearchService.IStatusEnum;
 
     /**
      * Type of the service.  Currently supported types:  - Classifier  - Prc
      */
-    Type?: IPrcService.ITypeEnum;
+    Type?: ISearchService.ITypeEnum;
 
     /**
      * Contains all the process ids which belong to this service
@@ -72,7 +73,7 @@ export interface IPrcService {
     ActualProcessId?: string;
 }
 
-export namespace IPrcService {
+export namespace ISearchService {
 
     export enum IStatusEnum { 
         New = <any> 'New',

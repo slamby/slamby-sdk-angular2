@@ -25,25 +25,12 @@
 'use strict';
 import * as models from './models';
 
-/**
- * These settings are required for the recommendation (Recommend method)
- */
-export interface IClassifierActivateSettings {
+export interface ISearchPrepareSettings {
     
 
     /**
-     * The list of the tag Ids which will emphasized during the recommendation
+     * The name of the DataSet in which this service will search
      */
-    EmphasizedTagIdList?: Array<string>;
-
-    /**
-     * \"The list of the tag Ids which will be activated (the recommendation will be contains these only)
-     */
-    TagIdList?: Array<string>;
-
-    /**
-     * The list of the NGrams will be activated (the recommendation algorithm will be use these only)
-     */
-    NGramList?: Array<number>;
+    DataSetName?: string;
 }
 

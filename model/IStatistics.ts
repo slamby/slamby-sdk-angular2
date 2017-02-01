@@ -26,24 +26,19 @@
 import * as models from './models';
 
 /**
- * These settings are required for the recommendation (Recommend method)
+ * contains statistics for one period (month)
  */
-export interface IClassifierActivateSettings {
+export interface IStatistics {
     
 
     /**
-     * The list of the tag Ids which will emphasized during the recommendation
+     * List of actions
      */
-    EmphasizedTagIdList?: Array<string>;
+    Actions?: Array<models.IAction>;
 
     /**
-     * \"The list of the tag Ids which will be activated (the recommendation will be contains these only)
+     * The sum of all requests count in the current period
      */
-    TagIdList?: Array<string>;
-
-    /**
-     * The list of the NGrams will be activated (the recommendation algorithm will be use these only)
-     */
-    NGramList?: Array<number>;
+    Sum?: number;
 }
 

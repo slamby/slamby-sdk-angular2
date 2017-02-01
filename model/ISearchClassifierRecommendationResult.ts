@@ -25,25 +25,29 @@
 'use strict';
 import * as models from './models';
 
-/**
- * These settings are required for the recommendation (Recommend method)
- */
-export interface IClassifierActivateSettings {
+export interface ISearchClassifierRecommendationResult {
     
 
     /**
-     * The list of the tag Ids which will emphasized during the recommendation
+     * If the recommended category is matched any of the search-matched documents categories
      */
-    EmphasizedTagIdList?: Array<string>;
+    SearchResultMatch?: boolean;
 
     /**
-     * \"The list of the tag Ids which will be activated (the recommendation will be contains these only)
+     * The recommended tag id
      */
-    TagIdList?: Array<string>;
+    TagId?: string;
 
     /**
-     * The list of the NGrams will be activated (the recommendation algorithm will be use these only)
+     * The score that belongs to the tag id
      */
-    NGramList?: Array<number>;
+    Score?: number;
+
+    Tag?: models.ITag;
+
+    /**
+     * If there was applied emphasizing by this tag
+     */
+    IsEmphasized?: boolean;
 }
 

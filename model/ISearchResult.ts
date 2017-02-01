@@ -26,24 +26,24 @@
 import * as models from './models';
 
 /**
- * These settings are required for the recommendation (Recommend method)
+ * A search result, actually a document itself with a relevance score
  */
-export interface IClassifierActivateSettings {
+export interface ISearchResult {
     
 
     /**
-     * The list of the tag Ids which will emphasized during the recommendation
+     * The ID of the document
      */
-    EmphasizedTagIdList?: Array<string>;
+    DocumentId?: string;
 
     /**
-     * \"The list of the tag Ids which will be activated (the recommendation will be contains these only)
+     * The relevance score
      */
-    TagIdList?: Array<string>;
+    Score?: number;
 
     /**
-     * The list of the NGrams will be activated (the recommendation algorithm will be use these only)
+     * The document itself but ONLY the FIELDS that you request with the RESPONSEFIELDLIST parameter
      */
-    NGramList?: Array<number>;
+    Document?: any;
 }
 

@@ -33,7 +33,7 @@ import 'rxjs/Rx';
 'use strict';
 
 @Injectable()
-export class DataSetApi {
+export class SearchServiceApi {
     protected basePath = 'https://localhost/';
     public defaultHeaders : Headers = new Headers();
 
@@ -46,74 +46,53 @@ export class DataSetApi {
     /**
      * 
      * 
-     * @param dataSet 
+     * @param id 
+     * @param searchActivateSettings 
      */
-    public createDataSet (dataSet?: models.IDataSet, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/DataSets';
+    public searchActivateService (id: string, searchActivateSettings?: models.ISearchActivateSettings, extraHttpRequestParams?: any ) : Observable<{}> {
+        const path = this.basePath + '/api/Services/Search/{id}/Activate'
+            .replace('{' + 'id' + '}', String(id));
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(dataSet);
-
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.text() ? response.json() : undefined;
-                }
-            });
-    }
-
-    /**
-     * 
-     * 
-     * @param dataSet 
-     */
-    public createDataSetSchema (dataSet?: models.IDataSet, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/DataSets/Schema';
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        let requestOptions: RequestOptionsArgs = {
-            method: 'POST',
-            headers: headerParams,
-            search: queryParameters
-        };
-        requestOptions.body = JSON.stringify(dataSet);
-
-        return this.http.request(path, requestOptions)
-            .map((response: Response) => {
-                if (response.status === 204) {
-                    return undefined;
-                } else {
-                    return response.text() ? response.json() : undefined;
-                }
-            });
-    }
-
-    /**
-     * 
-     * 
-     * @param name 
-     */
-    public deleteDataSet (name: string, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/DataSets/{name}'
-            .replace('{' + 'name' + '}', String(name));
-
-        let queryParameters = new URLSearchParams();
-        let headerParams = this.defaultHeaders;
-        // verify required parameter 'name' is not null or undefined
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling deleteDataSet.');
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling searchActivateService.');
         }
         let requestOptions: RequestOptionsArgs = {
-            method: 'DELETE',
+            method: 'POST',
+            headers: headerParams,
+            search: queryParameters
+        };
+        requestOptions.body = JSON.stringify(searchActivateSettings);
+
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.text() ? response.json() : undefined;
+                }
+            });
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     */
+    public searchDeactivateService (id: string, extraHttpRequestParams?: any ) : Observable<{}> {
+        const path = this.basePath + '/api/Services/Search/{id}/Deactivate'
+            .replace('{' + 'id' + '}', String(id));
+
+        let queryParameters = new URLSearchParams();
+        let headerParams = this.defaultHeaders;
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling searchDeactivateService.');
+        }
+        let requestOptions: RequestOptionsArgs = {
+            method: 'POST',
             headers: headerParams,
             search: queryParameters
         };
@@ -131,17 +110,17 @@ export class DataSetApi {
     /**
      * 
      * 
-     * @param name 
+     * @param id 
      */
-    public getDataSet (name: string, extraHttpRequestParams?: any ) : Observable<models.IDataSet> {
-        const path = this.basePath + '/api/DataSets/{name}'
-            .replace('{' + 'name' + '}', String(name));
+    public searchGetService (id: string, extraHttpRequestParams?: any ) : Observable<models.ISearchService> {
+        const path = this.basePath + '/api/Services/Search/{id}'
+            .replace('{' + 'id' + '}', String(id));
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
-        // verify required parameter 'name' is not null or undefined
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getDataSet.');
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling searchGetService.');
         }
         let requestOptions: RequestOptionsArgs = {
             method: 'GET',
@@ -162,17 +141,25 @@ export class DataSetApi {
     /**
      * 
      * 
+     * @param id 
+     * @param searchPrepareSettings 
      */
-    public getDataSets (extraHttpRequestParams?: any ) : Observable<Array<models.IDataSet>> {
-        const path = this.basePath + '/api/DataSets';
+    public searchPrepareService (id: string, searchPrepareSettings?: models.ISearchPrepareSettings, extraHttpRequestParams?: any ) : Observable<{}> {
+        const path = this.basePath + '/api/Services/Search/{id}/Prepare'
+            .replace('{' + 'id' + '}', String(id));
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling searchPrepareService.');
+        }
         let requestOptions: RequestOptionsArgs = {
-            method: 'GET',
+            method: 'POST',
             headers: headerParams,
             search: queryParameters
         };
+        requestOptions.body = JSON.stringify(searchPrepareSettings);
 
         return this.http.request(path, requestOptions)
             .map((response: Response) => {
@@ -187,25 +174,25 @@ export class DataSetApi {
     /**
      * 
      * 
-     * @param existingName 
-     * @param dataSetUpdate 
+     * @param id 
+     * @param request 
      */
-    public updateDataSet (existingName: string, dataSetUpdate?: models.IDataSetUpdate, extraHttpRequestParams?: any ) : Observable<{}> {
-        const path = this.basePath + '/api/DataSets/{existingName}'
-            .replace('{' + 'existingName' + '}', String(existingName));
+    public searchService (id: string, request?: models.ISearchRequest, extraHttpRequestParams?: any ) : Observable<Array<models.ISearchResultWrapper>> {
+        const path = this.basePath + '/api/Services/Search/{id}'
+            .replace('{' + 'id' + '}', String(id));
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
-        // verify required parameter 'existingName' is not null or undefined
-        if (existingName === null || existingName === undefined) {
-            throw new Error('Required parameter existingName was null or undefined when calling updateDataSet.');
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling searchService.');
         }
         let requestOptions: RequestOptionsArgs = {
-            method: 'PUT',
+            method: 'POST',
             headers: headerParams,
             search: queryParameters
         };
-        requestOptions.body = JSON.stringify(dataSetUpdate);
+        requestOptions.body = JSON.stringify(request);
 
         return this.http.request(path, requestOptions)
             .map((response: Response) => {

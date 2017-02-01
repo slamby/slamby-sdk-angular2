@@ -26,24 +26,19 @@
 import * as models from './models';
 
 /**
- * These settings are required for the recommendation (Recommend method)
+ * An action which is measured by the statistics. Currently it is equivalent with the API endpoints
  */
-export interface IClassifierActivateSettings {
+export interface IAction {
     
 
     /**
-     * The list of the tag Ids which will emphasized during the recommendation
+     * The endpoint name with the HTTP method (if there are multiple HTTP methods for an endpoint)
      */
-    EmphasizedTagIdList?: Array<string>;
+    Name?: string;
 
     /**
-     * \"The list of the tag Ids which will be activated (the recommendation will be contains these only)
+     * The request count for this action in the current period
      */
-    TagIdList?: Array<string>;
-
-    /**
-     * The list of the NGrams will be activated (the recommendation algorithm will be use these only)
-     */
-    NGramList?: Array<number>;
+    Count?: number;
 }
 

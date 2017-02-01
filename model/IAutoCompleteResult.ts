@@ -26,24 +26,24 @@
 import * as models from './models';
 
 /**
- * These settings are required for the recommendation (Recommend method)
+ * Contains a suggestion for the input text
  */
-export interface IClassifierActivateSettings {
+export interface IAutoCompleteResult {
     
 
     /**
-     * The list of the tag Ids which will emphasized during the recommendation
+     * The suggested text instead of the original text
      */
-    EmphasizedTagIdList?: Array<string>;
+    Text?: string;
 
     /**
-     * \"The list of the tag Ids which will be activated (the recommendation will be contains these only)
+     * The score of the suggestion relevance
      */
-    TagIdList?: Array<string>;
+    Score?: number;
 
     /**
-     * The list of the NGrams will be activated (the recommendation algorithm will be use these only)
+     * The related Classifier results for this suggested text
      */
-    NGramList?: Array<number>;
+    ClassifierResultList?: Array<models.ISearchClassifierRecommendationResult>;
 }
 

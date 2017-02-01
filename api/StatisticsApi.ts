@@ -33,7 +33,7 @@ import 'rxjs/Rx';
 'use strict';
 
 @Injectable()
-export class StatusApi {
+export class StatisticsApi {
     protected basePath = 'https://localhost/';
     public defaultHeaders : Headers = new Headers();
 
@@ -47,8 +47,8 @@ export class StatusApi {
      * 
      * 
      */
-    public getStatus (extraHttpRequestParams?: any ) : Observable<models.IStatus> {
-        const path = this.basePath + '/api/Status';
+    public getStatistics (extraHttpRequestParams?: any ) : Observable<models.IStatisticsWrapper> {
+        const path = this.basePath + '/api/Statistics/{year}/{month}';
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
