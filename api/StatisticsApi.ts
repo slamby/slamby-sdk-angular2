@@ -48,10 +48,78 @@ export class StatisticsApi {
      * 
      */
     public getStatistics (extraHttpRequestParams?: any ) : Observable<models.IStatisticsWrapper> {
-        const path = this.basePath + '/api/Statistics/{year}/{month}';
+        const path = this.basePath + '/api/Statistics';
 
         let queryParameters = new URLSearchParams();
         let headerParams = this.defaultHeaders;
+        let requestOptions: RequestOptionsArgs = {
+            method: 'GET',
+            headers: headerParams,
+            search: queryParameters
+        };
+
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.text() ? response.json() : undefined;
+                }
+            });
+    }
+
+    /**
+     * 
+     * 
+     * @param year 
+     */
+    public getStatistics_1 (year: number, extraHttpRequestParams?: any ) : Observable<models.IStatisticsWrapper> {
+        const path = this.basePath + '/api/Statistics/{year}'
+            .replace('{' + 'year' + '}', String(year));
+
+        let queryParameters = new URLSearchParams();
+        let headerParams = this.defaultHeaders;
+        // verify required parameter 'year' is not null or undefined
+        if (year === null || year === undefined) {
+            throw new Error('Required parameter year was null or undefined when calling getStatistics_1.');
+        }
+        let requestOptions: RequestOptionsArgs = {
+            method: 'GET',
+            headers: headerParams,
+            search: queryParameters
+        };
+
+        return this.http.request(path, requestOptions)
+            .map((response: Response) => {
+                if (response.status === 204) {
+                    return undefined;
+                } else {
+                    return response.text() ? response.json() : undefined;
+                }
+            });
+    }
+
+    /**
+     * 
+     * 
+     * @param year 
+     * @param month 
+     */
+    public getStatistics_2 (year: number, month: number, extraHttpRequestParams?: any ) : Observable<models.IStatisticsWrapper> {
+        const path = this.basePath + '/api/Statistics/{year}/{month}'
+            .replace('{' + 'year' + '}', String(year))
+            .replace('{' + 'month' + '}', String(month));
+
+        let queryParameters = new URLSearchParams();
+        let headerParams = this.defaultHeaders;
+        // verify required parameter 'year' is not null or undefined
+        if (year === null || year === undefined) {
+            throw new Error('Required parameter year was null or undefined when calling getStatistics_2.');
+        }
+        // verify required parameter 'month' is not null or undefined
+        if (month === null || month === undefined) {
+            throw new Error('Required parameter month was null or undefined when calling getStatistics_2.');
+        }
         let requestOptions: RequestOptionsArgs = {
             method: 'GET',
             headers: headerParams,

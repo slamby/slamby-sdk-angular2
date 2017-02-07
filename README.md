@@ -1,4 +1,4 @@
-## slamby-sdk-angular2@1.5.1
+## slamby-sdk-angular2@1.5.2
 
 ### Building
 
@@ -19,7 +19,7 @@ navigate to the folder of your consuming project and run one of next commando's.
 _published:_
 
 ```
-npm install slamby-sdk-angular2@1.5.1 --save
+npm install slamby-sdk-angular2@1.5.2 --save
 ```
 
 _unPublished (not recommended):_

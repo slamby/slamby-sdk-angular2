@@ -72,7 +72,7 @@ export interface ISearchSettings {
     CutOffFrequency?: number;
 
     /**
-     * Interpreted as a Levenshtein Edit Distanceâ€‰â€”â€‰the number of one character changes that need to be made to one string to make it the same as another string. Can be specified as: -1 (generates an edit distance based on the length of the term) or 0, 1, 2 (the maximum allowed Levenshtein Edit Distance)
+     * Interpreted as a Levenshtein Edit Distance — the number of one character changes that need to be made to one string to make it the same as another string. Can be specified as: -1 (generates an edit distance based on the length of the term) or 0, 1, 2 (the maximum allowed Levenshtein Edit Distance)
      */
     Fuzziness?: number;
 
